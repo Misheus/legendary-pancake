@@ -10,13 +10,14 @@ I don't remember. I setuped dev enviroment long time ago using OpenServer. But h
 1. Download and install your favotite webserver bundle for development. For example OpenServer.
 2. Pray.
 3. `git clone what the fuck is this repo link` or download zip and unzip in some specific folder I don't know which.
-4. Pray one more time.
-5. Try to enter to this in your browser I don't know how.
-6. Pray the third time.
-7. Fix all errors using google.
-8. Damn me.
-9. ??????
-10. Profit!
+4. Download some videos from https://sayastreams.mysheus.ru/
+5. Pray one more time.
+6. Try to enter to this in your browser I don't know how.
+7. Pray the third time.
+8. Fix all errors using google.
+9. Damn me.
+10. ??????
+11. Profit!
 
 Used library https://github.com/ramlmn/Apache-Directory-Listing and seems to be all. Correct me if I forgot which libs I used.
 #\[RU]
@@ -31,12 +32,13 @@ Used library https://github.com/ramlmn/Apache-Directory-Listing and seems to be 
 1. Скачать и установить ваш любимый девовский хрень, например OpenServer.
 2. Помолиться.
 3. `git clone какая там ссылка на этот репозиторий` или скачать и распаковать зипку не знаю куда
-4. Помолиться ещё раз.
-5. Попытаться зайти на неё не знаю как.
-6. Помолиться в третий раз.
-7. Пофиксить все ошибки при помощи гугла.
-8. Проклясть меня.
-9. ??????
-10. Профит!
+4. Скачать пару видео с https://sayastreams.mysheus.ru/
+5. Помолиться ещё раз.
+6. Попытаться зайти на неё не знаю как.
+7. Помолиться в третий раз.
+8. Пофиксить все ошибки при помощи гугла.
+9. Проклясть меня.
+10. ??????
+11. Профит!
 
 Использована библиотека https://github.com/ramlmn/Apache-Directory-Listing и вроде бы всё. Поправьте меня, если я забыл какие либы юзал.
