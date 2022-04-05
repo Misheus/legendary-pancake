@@ -3,7 +3,7 @@
     src: url("joypixels-android.ttf");
 }
 body {
-    --base-font-size: 16px;
+    --base-font-size: 15px;
     margin: 10px;
     font-family: 'Roboto', 'M PLUS 1p', 'joypixels', 'sans-serif';
     font-size: var(--base-font-size);
@@ -245,7 +245,7 @@ video {
     gap: .25em;
 }
 .chat-pfp {
-    width: 3.5em;
+    width: 2.5em;
     aspect-ratio: 1/1;
     flex-shrink: 0;
 }
@@ -444,9 +444,10 @@ body[data-touchscreen="true"] .video-controls-middle-inner {
         aspect-ratio: unset;
         /*noinspection CssUnresolvedCustomProperty*/
         height: calc(var(--true-vh, 100vh) - 40px - ((100vw - 20px) / 16 * 9) - (1.1rem * 1.25) - 0.5em);
+        /*height: max(calc(var(--true-vh, 100vh) - 40px - ((100vw - 20px) / 16 * 9) - (1.1rem * 1.25) - 0.5em), 200px);*/
         /*
          * Говорят, надо ограничить минимальную высоту чата. По идее это тут, но мне страшно это трогать.
-         * Сделать min(calc(...), сколько-то). Если вам это принципиально и вы собираетесь пулреквест, то
+         * Сделать max(calc(...), сколько-то). Если вам это принципиально и вы собираетесь пулреквест, то
          * вы можете это реализовать. (Мне просто страшно тут что-то менять.)
          */
     }
@@ -476,7 +477,7 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
     animation-duration: 500ms;
     animation-fill-mode: forwards;
     /*Ёбаный рот этих анимаций! Нихуя не работает. Курсор не ноне, дисплей не ноне, как дебажить я не ебу.
-     fixme not working cursor: none and we still can click on buttons but shouldn't
+     fixme not always working cursor: none and we still can click on buttons but shouldn't
      I don't know how to do this and I заебался with CSS so github repo is open for pull requests*/
 }
 #playeritself.inactive {
