@@ -1,0 +1,274 @@
+@font-face {
+    font-family: "joypixels";
+    src: url("joypixels-android.ttf");
+}
+body {
+    margin: 10px;
+    font-family: 'Roboto', 'M PLUS 1p', 'joypixels', 'sans-serif';
+    font-size: 14px;
+}
+.flex-container {
+    align-items: stretch;
+    display: flex;
+    gap: 20px;
+    /*flex-wrap: wrap;*/
+}
+.flex-container-left {
+    flex-basis: 1px;
+    flex-grow: 10;
+    display: grid;
+}
+.flex-container-right {
+    flex-basis: 1px;
+    flex-grow: 4;
+    /*aspect-ratio: 1;*/
+    height: calc((100vw - 40px) / 14 * 10 / 16 * 9);
+}
+.flex-container-right-inner {
+    width: 100%;
+    /*min-width: 350px;*/
+    /*min-height: 18em;*/
+    height: 100%;
+    /*font-size: clamp(10px, 1.5vw, 20px);*/
+    display: grid;
+    grid-template-rows: min-content 1fr;
+}
+video {
+    width: 100%;
+    vertical-align: top;
+    max-height: 100%;
+    aspect-ratio: 16/9;
+    grid-row: 1/2;
+    grid-column: 1/2;
+}
+
+.second-container {
+    margin-top: 20px;
+}
+
+
+.yes {
+    /*font-size: clamp(10px, 1.5vw, 20px);*/
+}
+.desc-inner {
+    padding: 5px;
+}
+
+
+.playlist-img {
+    vertical-align: top;
+    width: 100%;
+}
+.playlist-img-div {
+    vertical-align: top;
+    width: 130px;
+}
+.playlist-item {
+    margin: 5px;
+    /*width: calc(100% - 10px);*/
+}
+.playlist-item > div {
+    display: inline-block;
+    vertical-align: top;
+}
+.playlist-item-name-date {
+    /*width: calc(100% - 130px - 10px);*/
+    width: calc(100% - 130px);
+    padding-left: 10px;
+}
+
+.playlist-item-name {
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*    Ну и где мои многоточия, блять?!?!?!!?!? Ёбаный рот этого CSS!!! TODO исправить отсутствие многоточий*/
+}
+.grid-container {
+    display: grid;
+    grid-auto-columns: 10fr 4fr;
+    grid-template-areas: 'desc plst' 'comments plst';
+    gap: 20px;
+}
+
+
+/*@media (max-width: 1200px) {*/
+@media (max-aspect-ratio: 1/1) {
+    .flex-container {
+        flex-direction: column;
+    }
+    .grid-container {
+        grid-template-areas: 'desc' 'plst' 'comments';
+    }
+    .chat {
+        aspect-ratio: unset;
+        height: calc(100vh - 40px - ((100vw - 20px) / 16 * 9) - (1.1rem * 1.25) - 0.5em);
+    }
+}
+.video-settings > ul > li.volume-secondary {
+    display: none;
+}
+
+/*@media (max-width: 400px) {*/
+/*    .video-settings > ul > li.volume-secondary {*/
+/*        display: unset;*/
+/*    }*/
+/*    .volume-primary {*/
+/*        display: none;*/
+/*    }*/
+/*}*/
+
+.comments {
+    grid-area: comments;
+}
+
+
+.player-name {
+    font-weight: inherit;
+    padding: .25em;
+}
+.video-settings {
+    grid-row: 1/1;
+    grid-column: 1/1;
+    z-index: 7;
+    margin: auto 3vh 5vh auto;
+    background: gray;
+    padding: 10px;
+    max-height: calc(100vw/16*9 - 5vh);
+    overflow-y: scroll;
+}
+.video-settings > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 1em;
+}
+.video-settings > ul > li {
+    display: flex;
+    align-items: center;
+}
+.video-settings > ul > li > input {
+    width: 75px;
+}
+
+.settings-selected-btn {
+    background: blue;
+}
+
+.video-controls {
+    grid-row: 1/1;
+    grid-column: 1/1;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    z-index: 1;
+    color: white;
+}
+.video-controls-top {
+    /*grid-row: 1/2;*/
+    /*grid-column: 1/2;*/
+    /*z-index: 1;*/
+}
+.video-controls-middle {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+.video-controls-bottom {
+    /*grid-row: 2/3;*/
+    /*grid-column: 1/2;*/
+    /*z-index: 1;*/
+    display: grid;
+    align-items: end;
+}
+
+.video-controls-bottom-inner,
+.player-name {
+    background: #0000005e;
+}
+
+.time-bar-outer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.time-bar {
+    display: grid;
+    background: lightgray;
+    height: 5px;
+    flex-basis: 100%;
+}
+.bar-part {
+    grid-column: 1/2;
+    grid-row: 1/2;
+}
+.bar-loaded {
+    background: gray;
+    z-index: 1;
+}
+.bar-played {
+    background: hotpink;
+    z-index: 2;
+}
+.video-controls-bottom-inner {
+    padding: 0.75vw;
+}
+
+.bottom-btns {
+    display: flex;
+    margin-top: 0.75vw;
+    gap: 0.75vw;
+    align-items: center;
+}
+.bottom-btns > input {
+    width: 85px;
+}
+.right-btn {
+    margin-left: auto;
+}
+
+.hide-button-middle {
+    cursor: pointer;
+    margin-inline: auto;
+    padding: .25em;
+    font-size: 1.1rem;
+}
+
+.chat {
+    padding: .25em;
+    overflow-y: scroll;
+}
+.chat-messages {
+    display: grid;
+    gap: .25em;
+}
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+    gap: .25em;
+}
+.chat-pfp {
+    width: 3.5em;
+    aspect-ratio: 1/1;
+    border-radius: 1.75em;
+}
+
+
+
+
+
+
+.desc {
+    background: #ffd600;
+    grid-area: desc;
+}
+.plst {
+    background: #6200ea;
+    overflow-y: scroll;
+    height: 25em;
+    grid-area: plst;
+}
+.plst > ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}

@@ -1,0 +1,64 @@
+.btn-icon {
+    --btn-icon-transition-time: 300ms;
+}
+
+.volume-btn-icon > * {
+    opacity: 1;
+    transition: opacity var(--btn-icon-transition-time);
+}
+.volume-btn-icon[data-volume="3"] > .volume-btn-icon-cross {
+    opacity: 0;
+}
+.volume-btn-icon[data-volume="2"] > .volume-btn-icon-cross,
+.volume-btn-icon[data-volume="2"] > .volume-btn-icon-3 {
+    opacity: 0;
+}
+.volume-btn-icon[data-volume="1"] > .volume-btn-icon-cross,
+.volume-btn-icon[data-volume="1"] > .volume-btn-icon-3,
+.volume-btn-icon[data-volume="1"] > .volume-btn-icon-2 {
+    opacity: 0;
+}
+.volume-btn-icon[data-volume="0"] > .volume-btn-icon-cross,
+.volume-btn-icon[data-volume="0"] > .volume-btn-icon-3,
+.volume-btn-icon[data-volume="0"] > .volume-btn-icon-2,
+.volume-btn-icon[data-volume="0"] > .volume-btn-icon-1 {
+    opacity: 0;
+}
+.volume-btn-icon[data-volume="m"] > .volume-btn-icon-3,
+.volume-btn-icon[data-volume="m"] > .volume-btn-icon-2,
+.volume-btn-icon[data-volume="m"] > .volume-btn-icon-1 {
+    opacity: 0;
+}
+
+.play-btn-icon > * {
+    opacity: 1;
+    transition: opacity var(--btn-icon-transition-time);
+}
+.play-btn-icon[data-state="play"] > .play-btn-icon-pause {
+    opacity: 0;
+}
+.play-btn-icon[data-state="pause"] > .play-btn-icon-play {
+    opacity: 0;
+}
+
+.fs-btn-icon > * {
+    opacity: 1;
+    transition: opacity var(--btn-icon-transition-time);
+}
+.fs-btn-icon[data-fs="true"] > .fs-btn-icon-exit-fs {
+    opacity: 0;
+}
+.fs-btn-icon[data-fs="false"] > .fs-btn-icon-enter-fs {
+    opacity: 0;
+}
+
+.sfscr-btn-icon > * {
+    opacity: 1;
+    transition: opacity var(--btn-icon-transition-time);
+}
+.sfscr-btn-icon[data-state="enter"] > .sfscr-btn-icon-exit {
+    opacity: 0;
+}
+.sfscr-btn-icon[data-state="exit"] > .sfscr-btn-icon-enter {
+    opacity: 0;
+}

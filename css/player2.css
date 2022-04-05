@@ -1,0 +1,537 @@
+@font-face {
+    font-family: "joypixels";
+    src: url("joypixels-android.ttf");
+}
+body {
+    --base-font-size: 16px;
+    margin: 10px;
+    font-family: 'Roboto', 'M PLUS 1p', 'joypixels', 'sans-serif';
+    font-size: var(--base-font-size);
+}
+.flex-container {
+    align-items: stretch;
+    display: grid;
+    grid-template-columns: 10fr 4fr;
+    gap: 20px;
+    /*flex-wrap: wrap;*/
+}
+.flex-container-left {
+    /*flex-basis: 1px;*/
+    /*flex-grow: 10;*/
+    position: relative;
+    display: grid;
+    align-self: start;
+}
+.flex-container-right {
+    /*flex-basis: 1px;*/
+    /*flex-grow: 4;*/
+    /*aspect-ratio: 1;*/
+    /*height: calc((100vw - 40px) / 14 * 10 / 16 * 9);*/
+}
+.flex-container-right-inner {
+    width: 100%;
+    /*min-width: 350px;*/
+    /*min-height: 18em;*/
+    height: 100%;
+    /*font-size: clamp(10px, 1.5vw, 20px);*/
+    display: grid;
+    grid-template-rows: min-content 1fr;
+}
+video {
+    width: 100%;
+    vertical-align: top;
+    max-height: 100%;
+    /*aspect-ratio: 16/9;*/
+    grid-row: 1/2;
+    grid-column: 1/2;
+}
+
+.second-container {
+    margin-top: 20px;
+}
+
+
+.yes {
+    /*font-size: clamp(10px, 1.5vw, 20px);*/
+}
+.desc-inner {
+    padding: 5px;
+}
+
+
+.playlist-img {
+    vertical-align: top;
+    width: 100%;
+}
+.playlist-img-div {
+    vertical-align: top;
+    width: 130px;
+}
+.playlist-item {
+    margin: 5px;
+    /*width: calc(100% - 10px);*/
+}
+.playlist-item > div {
+    display: inline-block;
+    vertical-align: top;
+}
+.playlist-item-name-date {
+    /*width: calc(100% - 130px - 10px);*/
+    width: calc(100% - 130px);
+    padding-left: 10px;
+}
+
+.playlist-item-name {
+    /*max-height: 3em;*/
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /*    Ну и где мои многоточия, блять?!?!?!!?!? Ёбаный рот этого CSS!!! TO DO исправить отсутствие многоточий*/
+}
+.grid-container {
+    display: grid;
+    grid-auto-columns: 10fr 4fr;
+    grid-template-areas: 'desc plst' 'comments plst';
+    gap: 20px;
+}
+.video-settings > ul > li.volume-secondary {
+    display: none;
+}
+
+.comments {
+    grid-area: comments;
+}
+
+
+.player-name {
+    font-weight: inherit;
+    padding: .25em;
+}
+.video-settings {
+    position: absolute;
+    grid-row: 1/1;
+    grid-column: 1/1;
+    z-index: 7;
+    right: 1%;
+    bottom: 57px;
+    background: #00000066;
+    padding: 10px;
+    max-height: calc(100vw/16*9 - 5vh);
+    overflow-y: auto;
+    isolation: isolate;
+    color: white;
+}
+
+.video-settings a {
+    color: magenta;
+}
+
+.settings-bg {
+    content: ' ';
+    position: fixed;
+    inset: 0 0 0 0;
+    z-index: -1;
+}
+
+.video-settings > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 1em;
+}
+.video-settings > ul > li {
+    display: flex;
+    align-items: center;
+}
+.video-settings > ul > li > input {
+    width: 75px;
+}
+
+.settings-selected-btn {
+    background: blue;
+}
+
+.video-controls {
+    grid-row: 1/1;
+    grid-column: 1/1;
+    display: grid;
+    grid-template-rows: 1fr 0fr 1fr;
+    z-index: 1;
+    color: white;
+}
+.video-controls-top {
+    /*grid-row: 1/2;*/
+    /*grid-column: 1/2;*/
+    /*z-index: 1;*/
+}
+.video-controls-middle {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+.video-controls-bottom {
+    /*grid-row: 2/3;*/
+    /*grid-column: 1/2;*/
+    /*z-index: 1;*/
+    display: grid;
+    align-items: end;
+}
+
+.video-controls-bottom-inner,
+.player-name {
+    background: #0000005e;
+}
+
+.time-bar-outer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.time-bar {
+    display: grid;
+    background: lightgray;
+    height: 5px;
+    flex-basis: 100%;
+}
+.bar-part {
+    grid-column: 1/2;
+    grid-row: 1/2;
+}
+.bar-loaded {
+    background: gray;
+    z-index: 1;
+}
+.bar-played {
+    background: hotpink;
+    z-index: 2;
+}
+.video-controls-bottom-inner {
+    padding: 0.75vw;
+}
+
+.bottom-btns {
+    display: flex;
+    gap: 0.75vw;
+    align-items: center;
+}
+.bottom-btns > input {
+    width: 85px;
+}
+.right-btn {
+    margin-left: auto;
+}
+
+.hide-button-middle {
+    cursor: pointer;
+    margin: 0 auto;
+    padding: .25em;
+    font-size: 1.1rem;
+}
+
+.chat {
+    padding: .25em;
+    overflow-y: scroll;
+}
+.chat-messages {
+    display: grid;
+    gap: .25em;
+}
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+    gap: .25em;
+}
+.chat-pfp {
+    width: 3.5em;
+    aspect-ratio: 1/1;
+    flex-shrink: 0;
+}
+.chat-pfp > img {
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+}
+
+.ytemoji,
+.chaticon {
+    width: 1em;
+    height: 1em;
+    vertical-align: top;
+    display: revert;
+}
+
+.message-text {
+    word-break: break-word;
+}
+
+.moder {
+    color: #5f84f1;
+}
+.owner {
+    color: #ffd600;
+}
+
+.btn-icon {
+    height: 1.25em;
+    vertical-align: bottom;
+}
+
+.player-name,
+.video-controls-bottom-inner{
+    position: relative;
+}
+.player-name::after {
+    content: '';
+    position: absolute;
+    background:
+        linear-gradient(
+        180deg, #0000005e,
+        transparent);
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 100%;
+}
+.video-controls-bottom-inner::before {
+    content: '';
+    position: absolute;
+    background:
+        linear-gradient(
+        0deg, #0000005e,
+        transparent);
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 100%;
+}
+
+/*@media (max-width: 550px) {*/
+/*    .volume-primary {*/
+/*        display: none;*/
+/*    }*/
+/*    .video-settings > ul > li.volume-secondary {*/
+/*        display: flex;*/
+/*    }*/
+/*}*/
+
+.volume-primary {
+    background: lightgray;
+    display: grid;
+    width: 75px;
+    height: 5px;
+}
+#primaryvolumebar {
+    background: hotpink;
+}
+
+.btn {
+    padding: .5em;
+    border: 0;
+    background: transparent;
+    color: white;
+}
+body[data-touchscreen="false"] .btn:hover, .btn:focus-visible {
+    background: #42424242;
+}
+.btn:active {
+    background: #42424252;
+    outline: 2px solid #42424262;
+}
+
+.player-btn {
+    border-radius: 50%;
+}
+
+.desc {
+    grid-area: desc;
+}
+.dasc-saya-data {
+    flex-grow: 1;
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-columns: 1fr;
+}
+.flex {
+    display: flex;
+}
+
+.desc-row {
+    display: flex;
+    font-size: 1.25rem;
+}
+.saya-pfp {
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 50%;
+}
+.desc-btn {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+}
+.btn-left-gap {
+    margin-left: .125em;
+}
+.desc-btn > svg {
+    width: 1em;
+}
+.desc-links {
+    font-size: 1rem;
+    align-self: center;
+}
+.desc-text-collapse {
+    margin-top: .5em;
+    cursor: pointer;
+}
+.video-controls-middle-inner {
+    /*display: grid;*/
+    display: none;
+    grid-auto-flow: column;
+    gap: .5em;
+}
+body[data-touchscreen="true"] .video-controls-middle-inner {
+    display: grid;
+}
+.video-controls-middle-btn {
+    background: #00000044;
+    z-index: 5;
+    font-size: calc(var(--base-font-size) * 2);
+}
+
+#seekbarbtn {
+    z-index: 5;
+}
+
+.vote {
+    color: gray;
+}
+.upvote.active {
+    color: orange;
+}
+.downvote.active {
+    color: dodgerblue;
+}
+
+.plst {
+    height: 25em;
+    grid-area: plst;
+    display: grid;
+}
+.plst > ul {
+    overflow-y: scroll;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+
+/*@media (max-width: 1200px) {*/
+@media (max-aspect-ratio: 4/3) {
+    .flex-container {
+        grid-template-columns: 1fr;
+        height: unset !important;
+    }
+    .flex-container-right {
+        height: unset !important;
+    }
+    .grid-container {
+        grid-template-areas: 'desc' 'plst' 'comments';
+    }
+    .chat {
+        aspect-ratio: unset;
+        /*noinspection CssUnresolvedCustomProperty*/
+        height: calc(var(--true-vh, 100vh) - 40px - ((100vw - 20px) / 16 * 9) - (1.1rem * 1.25) - 0.5em);
+        /*
+         * Говорят, надо ограничить минимальную высоту чата. По идее это тут, но мне страшно это трогать.
+         * Сделать min(calc(...), сколько-то). Если вам это принципиально и вы собираетесь пулреквест, то
+         * вы можете это реализовать. (Мне просто страшно тут что-то менять.)
+         */
+    }
+    .video-settings {
+        top: 1%;
+        bottom: revert;
+        max-height: revert;
+    }
+}
+
+body[data-nochat="true"] .flex-container-right,
+body[data-nochat="true"] #semifsbtn{
+    display: none;
+}
+body[data-nochat="true"] .flex-container {
+    grid-template-columns: 1fr;
+}
+body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
+    max-height: 90vh;
+}
+.btn {
+    cursor: pointer;
+}
+#playeritself.inactive .video-controls {
+    /*animation: fadeOut 500ms linear;*/
+    animation-name: fadeOut;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+    /*Ёбаный рот этих анимаций! Нихуя не работает. Курсор не ноне, дисплей не ноне, как дебажить я не ебу.
+     fixme not working cursor: none and we still can click on buttons but shouldn't
+     I don't know how to do this and I заебался with CSS so github repo is open for pull requests*/
+}
+#playeritself.inactive {
+    cursor: none;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1 }
+    100% {
+        opacity: 0;
+        display: none;
+        cursor: none;
+    }
+}
+
+#playeritself[data-fullscreen="1"] {
+    color: white;
+    align-items: center;
+    grid-template-columns: 10fr 2fr;
+}
+#playeritself[data-fullscreen="1"] .flex-container-left {
+    align-self: revert;
+}
+
+#playeritself[data-fullscreen="2"] .flex-container-right{
+    display: none;
+}
+#playeritself[data-fullscreen="2"] {
+    grid-template-columns: 1fr;
+}
+
+/*@media (max-width: 400px) {*/
+/*    .video-settings > ul > li.volume-secondary {*/
+/*        display: unset;*/
+/*    }*/
+/*    .volume-primary {*/
+/*        display: none;*/
+/*    }*/
+/*}*/
+#chatcollapse {
+    transition: all 500ms;
+}
+#chatcollapse[data-collapsed="true"] {
+    transform: scaleY(0);
+    height: 0;
+}
+
+#description[data-collapsed="true"] {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.work-in-progress {
+    display: none !important;
+}
