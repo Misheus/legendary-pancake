@@ -16,12 +16,16 @@ RewriteRule .* /399d1530-4618-45d7-908a-affef0f6740b.html [NC,L]
   # Ignore listing of the listing directory
   IndexIgnore "/directory-listing"
   IndexIgnore "/watch.html"
-  IndexIgnore "/chat"
+  IndexIgnore "/watch.php"
   IndexIgnore "/fonts"
   IndexIgnore "/icons"
   IndexIgnore "/emoji"
 #  IndexIgnore "/dev"
+  IndexIgnore "/css"
+  IndexIgnore "/js"
   IndexIgnore "/PleaseDoNotTheCat.jpg"
+  IndexIgnore "/399d1530-4618-45d7-908a-affef0f6740b.html"
+  IndexIgnore "/2021-02-12.mp4.old"
 
   # Indexing options
   IndexOptions +AddAltClass +Charset=UTF-8 +FancyIndexing +FoldersFirst +HTMLTable

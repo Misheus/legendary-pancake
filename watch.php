@@ -59,8 +59,6 @@ $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO у
     <link type="text/css" rel="stylesheet" href="/css/player2.css">
     <link type="text/css" rel="stylesheet" href="/css/btns-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <script src="/js/player.js" defer></script>
-    <script src="/js/true-vh.js" defer></script>
 </head>
 <body data-touchscreen="true">
     <main>
@@ -397,5 +395,7 @@ $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO у
             </div>
         </div>
     </main>
+    <script src="/js/player.js"></script>
+    <script src="/js/true-vh.js"></script>
 </body>
 </html>
