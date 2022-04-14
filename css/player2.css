@@ -253,6 +253,9 @@ video {
     border-radius: 50%;
     aspect-ratio: 1/1;
 }
+.chat-name {
+    font-weight: 500;
+}
 
 .ytemoji,
 .chaticon {
@@ -507,6 +510,10 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
 }
 #playeritself[data-fullscreen="2"] {
     grid-template-columns: 1fr;
+}
+#playeritself[data-fullscreen="0"] .video-controls-top {
+    height: 0;
+    overflow: hidden;
 }
 
 /*@media (max-width: 400px) {*/

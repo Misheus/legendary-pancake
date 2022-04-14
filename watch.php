@@ -56,7 +56,7 @@ $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO у
     <meta property="og:video:type" content="video/mp4" />
     <meta property="og:video:width" content="1280" />
     <meta property="og:video:height" content="720" />
-<!--    <meta property="og:image" content="todo">-->
+    <meta property="og:image" content="https://sayastreams.mysheus.ru/covers/<?php echo $videoname ?>.jpg">
     <title><?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.ru</title>
     <link type="text/css" rel="stylesheet" href="/css/reset.css">
     <link type="text/css" rel="stylesheet" href="/css/player2.css">
