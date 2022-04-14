@@ -295,6 +295,54 @@ document.addEventListener('keydown', e=>{
 
 //chat
 if(chat){
+(async ()=>{
+
+    let badges
+
+    try {
+        if(chat[0].tags) { //twitch chat
+            badges = (await (await fetch('https://badges.twitch.tv/v1/badges/global/display')).json()).badge_sets
+        }
+    } catch (e) {}
+    if(!badges) badges = {}
+
+
+    function convertTwitchEmoji(msg, em)
+    {
+        if(!em)return escapeHtml(msg);
+
+        let emlist = [];
+        let ems = Object.keys(em);
+        for(let i = 0; i < ems.length; i++)
+        {
+            for(let j = 0; j < em[ems[i]].length; j++)
+            {
+                let pos = em[ems[i]][j].split('-');
+                emlist.push({
+                    id: ems[i],
+                    start: parseInt(pos[0]),
+                    end: parseInt(pos[1])
+                })
+            }
+        }
+
+        emlist.sort((a, b) => {
+            if (a.start < b.start) return -1;
+            if (a.start > b.start) return 1;
+            return 0;
+        })
+
+        let res = '';
+
+        for(let i = 0; i < emlist.length; i++)
+        {
+            res += escapeHtml(msg.slice((((emlist[i-1] || {end: -1}).end)+1), emlist[i].start));
+            res += '<img class="ytemoji" src="https://static-cdn.jtvnw.net/emoticons/v2/'+emlist[i].id+'/default/light/1.0" alt="'+escapeHtml(msg.slice(emlist[i].start, emlist[i].end+1))+'">'//'<'+emlist[i].id+'>';
+        }
+        res += escapeHtml(msg.slice((emlist[emlist.length-1].end+1)));
+
+        return res;
+    }
 
 
     function secToTime(sec_num) {
@@ -463,7 +511,7 @@ if(chat){
     function displayChatMessage(msg, toEnd = true) {
         //console.log(msg)
         //console.log(msg.authorDetails.displayName + ' - ' + msg.snippet.displayMessage)
-        if(!chat[0].snippet)
+        /*if(!chat[0].snippet)//crutch to transform twitch chat to youtube format
         {
             msg = {
                 "snippet": {
@@ -479,37 +527,69 @@ if(chat){
                     "channelId": msg.tags.username,
                     "channelUrl": "https://www.twitch.tv/"+msg.tags.username,
                     "displayName":  msg.tags["display-name"],
-                    "profileImageUrl": "",//todo
-                    "isVerified": false,//todo
-                    "isChatOwner": false,//todo
-                    "isChatSponsor": false,//todo
-                    "isChatModerator": false//todo
+                    "profileImageUrl": "",//to do
+                    "isVerified": false,//to do
+                    "isChatOwner": false,//to do
+                    "isChatSponsor": false,//to do
+                    "isChatModerator": false//to do
                 }
             }
+        }*/
+        let msgbadgestext = ''
+        let userbadges = Object.keys(msg.tags.badges || {})
+
+        for(let i = 0; i < userbadges.length; i++) {
+            let badge = badges[userbadges[i]].versions[msg.tags.badges[userbadges[i]]]
+            msgbadgestext+=
+                '<a href="'+(badge.click_action==='visit_url'?badge.click_url:'')+'" target="_blank" class="twitch-badge">' +
+                    '<img src="'+badge.image_url_1x+'" alt="'+badge.title+' badge" title="'+badge.title+'">' +
+                '</a>'
         }
+
         let newmsg = document.createElement('div');
         newmsg.classList.add('chat-message')
-        newmsg.id = Date.parse(msg.snippet.publishedAt)
-        newmsg.innerHTML =
-            '<a href="'+msg.authorDetails.channelUrl+'" target="_blank" class="chat-pfp">' +
+        if(msg.snippet) {//youtube chat
+            newmsg.id = Date.parse(msg.snippet.publishedAt)
+            newmsg.innerHTML =
+                '<a href="'+msg.authorDetails.channelUrl+'" target="_blank" class="chat-pfp">' +
                 '<img alt="" src="'+msg.authorDetails.profileImageUrl+'">' +
-            '</a>' +
-            '<div class="message-text">' +
+                '</a>' +
+                '<div class="message-text">' +
                 '<span class="chat-time" onclick="video.currentTime='+(Date.parse(msg.snippet.publishedAt)-starttime)/1000+'">'+convertTime(msg.snippet.publishedAt)+' </span>' +
                 '<span class="chat-name '+
-                    (msg.authorDetails.isChatModerator?'moder ':'') +
-                    (msg.authorDetails.isChatOwner?'owner ':'') +
-                    (msg.authorDetails.isVerified?'verifed ':'') +
-                    '">'+
-                    escapeHtml(msg.authorDetails.displayName) + ((msg.authorDetails.isVerified)?('<img class="chaticon" alt="" src="icons/ytverifed'+
-                        ((msg.authorDetails.isChatModerator)?('moder'):((msg.authorDetails.isChatOwner)?('owner'):('')))+
-                        '.svg">'):(''))+
-                    ((msg.authorDetails.isChatModerator)?('<img class="chaticon" alt="" src="icons/ytmoder.svg">'):('')) +': ' +
+                (msg.authorDetails.isChatModerator?'moder ':'') +
+                (msg.authorDetails.isChatOwner?'owner ':'') +
+                (msg.authorDetails.isVerified?'verifed ':'') +
+                '">'+
+                escapeHtml(msg.authorDetails.displayName) + ((msg.authorDetails.isVerified)?('<img class="chaticon" alt="" src="icons/ytverifed'+
+                    ((msg.authorDetails.isChatModerator)?('moder'):((msg.authorDetails.isChatOwner)?('owner'):('')))+
+                    '.svg">'):(''))+
+                ((msg.authorDetails.isChatModerator)?('<img class="chaticon" alt="" src="icons/ytmoder.svg">'):('')) +': ' +
                 '</span>'+
                 '<span class="chattext">' +
-                    convertYTemoji(escapeHtml(msg.snippet.displayMessage))
+                convertYTemoji(escapeHtml(msg.snippet.displayMessage))
                 + '</span>' +
-            '</div>'
+                '</div>'
+        } else {//twitch chat
+            newmsg.id = msg.tags["tmi-sent-ts"]
+            newmsg.innerHTML =
+                /*'<a href="'+msg.authorDetails.channelUrl+'" target="_blank" class="chat-pfp">' +
+                '<img alt="" src="'+msg.authorDetails.profileImageUrl+'">' +//if I will want avatrs in chat for twitch
+                '</a>' +*/
+                '<div class="message-text">' +
+                    '<span class="chat-time" onclick="video.currentTime='+(parseInt(msg.tags["tmi-sent-ts"])-starttime)/1000+'">'+convertTime(new Date(parseInt(msg.tags["tmi-sent-ts"])).toISOString())+' </span>' +
+                    '<span class="chat-name" style="'+(msg.tags.color?'color: '+msg.tags.color:'')+'">'+
+                        msgbadgestext +
+                        '<a href="https://www.twitch.tv/'+msg.tags.username+'" target="_blank" class="twitch-name">' +
+                            escapeHtml(msg.tags["display-name"]) +
+                        '</a>' + ': ' +
+                    '</span>'+
+                    '<span class="chattext">' +
+                        convertTwitchEmoji(msg.message, msg.tags.emotes) +
+                    '</span>' +
+                '</div>'
+        }
+
         if(toEnd) {
             chatdiv.appendChild(newmsg)
             //chatdiv.parentElement.scroll(0, chatdiv.parentElement.scrollHeight - chatdiv.parentElement.offsetHeight)
@@ -518,10 +598,11 @@ if(chat){
             document.getElementById('skipedmsg').after(newmsg)
         }
     }
-
+})()
 } else {
     document.body.dataset.nochat = 'true'
 }
+
 
 //collapse button
 chatcollapsebutton.addEventListener('click', ()=>{

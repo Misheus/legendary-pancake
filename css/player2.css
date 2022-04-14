@@ -515,6 +515,14 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
     height: 0;
     overflow: hidden;
 }
+.twitch-name {
+    text-decoration: none;
+    color: inherit;
+}
+.twitch-badge > img {
+    display: revert;
+    vertical-align: top;
+}
 
 /*@media (max-width: 400px) {*/
 /*    .video-settings > ul > li.volume-secondary {*/
