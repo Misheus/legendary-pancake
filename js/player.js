@@ -541,7 +541,7 @@ if(chat){
         for(let i = 0; i < userbadges.length; i++) {
             let badge = badges[userbadges[i]].versions[msg.tags.badges[userbadges[i]]]
             msgbadgestext+=
-                '<a href="'+(badge.click_action==='visit_url'?badge.click_url:'')+'" target="_blank" class="twitch-badge">' +
+                '<a '+(badge.click_action==='visit_url'?'href="'+badge.click_url+'" target="_blank"':'')+ ' class="twitch-badge">' +
                     '<img src="'+badge.image_url_1x+'" alt="'+badge.title+' badge" title="'+badge.title+'">' +
                 '</a>'
         }

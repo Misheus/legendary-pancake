@@ -522,6 +522,7 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
 .twitch-badge > img {
     display: revert;
     vertical-align: top;
+    margin-right: 0.2em;
 }
 
 /*@media (max-width: 400px) {*/
