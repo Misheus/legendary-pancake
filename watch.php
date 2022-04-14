@@ -26,7 +26,12 @@ if(!file_exists("../mysheus.ru/MeeThya/sayastreams_songlists_forplayer/$videonam
     $description = resolveLoc("description_not_found");//"Не удалось загрузить описание. Скорее всего его просто нет.";
 else $description = file_get_contents("../mysheus.ru/MeeThya/sayastreams_songlists_forplayer/$videoname.txt");
 
-$starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO учитывать язык и для русского перевести месяцы на русский.
+$streamname = '';
+if(!file_exists("names/$videoname"))
+    $streamname = "⭐stream⭐";
+else $streamname = file_get_contents("names/$videoname");
+
+$starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO учитывать язык, и для русского перевести месяцы на русский.
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +49,7 @@ $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO у
 <!--А если еблокнига теперь называется мета, значит ли это, что нам теперь нужно платить за использование <meta> тегов???-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Смотри удалённые записи стримов Сайи на sayastreams.mysheus.ru!">
-    <meta property="og:title" content="⭐stream⭐, <?php echo $starttimeformated; ?> – sayastreams.mysheus.ru" />
-    <!-- todo название -->
+    <meta property="og:title" content="<?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.ru" />
     <meta property="og:type" content="video.other" />
     <meta property="og:video" content="../2020-05-16.mp4" />
     <meta property="og:video:secure_url" content="../2020-05-16.mp4" />
@@ -53,8 +57,7 @@ $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO у
     <meta property="og:video:width" content="1280" />
     <meta property="og:video:height" content="720" />
 <!--    <meta property="og:image" content="todo">-->
-    <title>⭐stream⭐, <?php echo $starttimeformated; ?> – sayastreams.mysheus.ru</title>
-    <!-- todo название -->
+    <title><?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.ru</title>
     <link type="text/css" rel="stylesheet" href="/css/reset.css">
     <link type="text/css" rel="stylesheet" href="/css/player2.css">
     <link type="text/css" rel="stylesheet" href="/css/btns-icons.css">
@@ -67,7 +70,7 @@ $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO у
                 <video src="<?php echo $video ?>"></video>
                 <div class="video-controls">
                     <div class="video-controls-top">
-                        <h2 class="player-name">⭐stream⭐, <em><time datetime="<?php echo $starttime; ?>"></time></em></h2>
+                        <h2 class="player-name"><?php echo $streamname; ?>, <em><time datetime="<?php echo $starttime; ?>"></time></em></h2>
                     </div>
                     <div class="video-controls-middle">
                         <div class="video-controls-middle-inner">
@@ -312,7 +315,7 @@ $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO у
         <div class="grid-container second-container yes">
             <div class="desc">
                 <div class="desc-inner">
-                    <h1>⭐stream⭐</h1>
+                    <h1><?php echo $streamname; ?></h1>
                     <div><span class="work-in-progress">123 456 gпросмотров ● </span><time datetime="<?php echo $starttime; ?>"></time></div>
                     <h3><?php echo resolveLocf('githubtext', '<a href="https://github.com/Misheus/legendary-pancake" target="_blank">GitHub</a>'); ?></h3>
                     <div class="desc-row">
