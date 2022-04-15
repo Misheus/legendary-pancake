@@ -63,12 +63,12 @@ ass()
 //console.log(starttime, chatdata, description)
 
 //convert dates to human form
-const dateConverter = new Intl.DateTimeFormat(resolveLoc('lang_code'), {year:"numeric", month:"long",day:"2-digit", hour: '2-digit', minute: '2-digit', second: '2-digit'})
+const dateConverter = new Intl.DateTimeFormat(resolveLoc('lang_code'), {year:"numeric", month:"long",day:"numeric", hour: 'numeric', minute: 'numeric', second: 'numeric'})
+const dateConverterNoTime = new Intl.DateTimeFormat(resolveLoc('lang_code'), {year:"numeric", month:"long",day:"numeric"})
 
 document.querySelectorAll('time').forEach(el=>{
-    el.innerText = dateConverter.format(new Date(el.dateTime));//.format(new Date)
-    //todo do not display some shit instead of time when we don't have time. Display just date
-})
+    el.innerText = el.dateTime.length>10?dateConverter.format(new Date(el.dateTime)):dateConverterNoTime.format(new Date(el.dateTime));//.format(new Date)
+    })
 
 
 
@@ -98,9 +98,9 @@ document.addEventListener('click', e=>{
 
 description_text.innerHTML = parseTimecodedText(description)
 
+let inactivity = 0;
 video.addEventListener('loadedmetadata', ()=>{
-    let inactivity = 0;
-    document.addEventListener('mousemove', ()=> {
+    fcl.addEventListener('mousemove', ()=> {
         inactivity = 0
         playeritself.classList.remove('inactive')
     })
@@ -108,7 +108,7 @@ video.addEventListener('loadedmetadata', ()=>{
     setInterval(()=>{
         if(inactivity > 25) {
             playeritself.classList.add('inactive')
-        } else {
+        } else if (!video.paused){
             inactivity++
         }
         //updating all shit
@@ -255,6 +255,8 @@ video.addEventListener('loadedmetadata', ()=>{
 
 document.addEventListener('keydown', e=>{
     //console.log(e.code);
+    inactivity = 0
+    playeritself.classList.remove('inactive')
     switch (e.code) {
         case 'ArrowUp':
             video.volume = video.volume+.05>1?1:video.volume+.05
@@ -535,16 +537,6 @@ if(chat){
                 }
             }
         }*/
-        let msgbadgestext = ''
-        let userbadges = Object.keys(msg.tags.badges || {})
-
-        for(let i = 0; i < userbadges.length; i++) {
-            let badge = badges[userbadges[i]].versions[msg.tags.badges[userbadges[i]]]
-            msgbadgestext+=
-                '<a '+(badge.click_action==='visit_url'?'href="'+badge.click_url+'" target="_blank"':'')+ ' class="twitch-badge">' +
-                    '<img src="'+badge.image_url_1x+'" alt="'+badge.title+' badge" title="'+badge.title+'">' +
-                '</a>'
-        }
 
         let newmsg = document.createElement('div');
         newmsg.classList.add('chat-message')
@@ -571,6 +563,16 @@ if(chat){
                 + '</span>' +
                 '</div>'
         } else {//twitch chat
+            let msgbadgestext = ''
+            let userbadges = Object.keys(msg.tags.badges || {})
+
+            for(let i = 0; i < userbadges.length; i++) {
+                let badge = badges[userbadges[i]].versions[msg.tags.badges[userbadges[i]]]
+                msgbadgestext+=
+                    '<a '+(badge.click_action==='visit_url'?'href="'+badge.click_url+'" target="_blank"':'')+ ' class="twitch-badge">' +
+                    '<img src="'+badge.image_url_1x+'" alt="'+badge.title+' badge" title="'+badge.title+'">' +
+                    '</a>'
+            }
             newmsg.id = msg.tags["tmi-sent-ts"]
             newmsg.innerHTML =
                 /*'<a href="'+msg.authorDetails.channelUrl+'" target="_blank" class="chat-pfp">' +

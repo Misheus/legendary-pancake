@@ -31,7 +31,10 @@ if(!file_exists("names/$videoname"))
     $streamname = "⭐stream⭐";
 else $streamname = file_get_contents("names/$videoname");
 
-$starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //TO DO учитывать язык, и для русского перевести месяцы на русский.
+$starttimeformated = date("F j, Y, g:i:s a", strtotime($starttime)); //English
+//$starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //Russian
+//This is wrong. Exists IntlDateFormatter.
+//Should we use User timezone or Saya's timezone (Europe/Moscow)?
 ?>
 
 <!DOCTYPE html>

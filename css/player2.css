@@ -474,6 +474,11 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
 .btn {
     cursor: pointer;
 }
+
+.desc-inner > h1 {
+    font-size: calc(var(--base-font-size) * 1.7);
+}
+
 #playeritself.inactive .video-controls {
     /*animation: fadeOut 500ms linear;*/
     animation-name: fadeOut;
@@ -483,7 +488,7 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
      fixme not always working cursor: none and we still can click on buttons but shouldn't
      I don't know how to do this and I заебался with CSS so github repo is open for pull requests*/
 }
-#playeritself.inactive {
+#playeritself.inactive .video-controls {
     cursor: none;
 }
 
