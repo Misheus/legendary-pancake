@@ -1,3 +1,6 @@
+Array.prototype.random = function () {
+    return this[Math.floor((Math.random()*this.length))];
+}
 
 //get elements
 const video = document.querySelector('video')
@@ -308,6 +311,24 @@ if(chat){
     } catch (e) {}
     if(!badges) badges = {}
 
+    let twitchChatColors = [
+        "rgb(255, 0, 0)",
+        "rgb(0, 0, 255)",
+        "rgb(0, 128, 0)",
+        "rgb(178, 34, 34)",
+        "rgb(255, 127, 80)",
+        "rgb(154, 205, 50)",
+        "rgb(255, 69, 0)",
+        "rgb(46, 139, 87)",
+        "rgb(218, 165, 32)",
+        "rgb(210, 105, 30)",
+        "rgb(95, 158, 160)",
+        "rgb(30, 144, 255)",
+        "rgb(255, 105, 180)",
+        "rgb(138, 43, 226)",
+        "rgb(0, 255, 127)"
+    ]
+    let twitchUsersColors = {}
 
     function convertTwitchEmoji(msg, em)
     {
@@ -510,6 +531,8 @@ if(chat){
     //console.log('call shit')
     video.ontimeupdate(undefined)
 
+
+
     function displayChatMessage(msg, toEnd = true) {
         //console.log(msg)
         //console.log(msg.authorDetails.displayName + ' - ' + msg.snippet.displayMessage)
@@ -573,6 +596,10 @@ if(chat){
                     '<img src="'+badge.image_url_1x+'" alt="'+badge.title+' badge" title="'+badge.title+'">' +
                     '</a>'
             }
+
+            if(!msg.tags.color && ! twitchUsersColors[msg.tags.username])
+                twitchUsersColors[msg.tags.username] = twitchChatColors.random()
+
             newmsg.id = msg.tags["tmi-sent-ts"]
             newmsg.innerHTML =
                 /*'<a href="'+msg.authorDetails.channelUrl+'" target="_blank" class="chat-pfp">' +
@@ -580,7 +607,7 @@ if(chat){
                 '</a>' +*/
                 '<div class="message-text">' +
                     '<span class="chat-time" onclick="video.currentTime='+(parseInt(msg.tags["tmi-sent-ts"])-starttime)/1000+'">'+convertTime(new Date(parseInt(msg.tags["tmi-sent-ts"])).toISOString())+' </span>' +
-                    '<span class="chat-name" style="'+(msg.tags.color?'color: '+msg.tags.color:'')+'">'+
+                    '<span class="chat-name" style="color: '+(msg.tags.color?msg.tags.color:twitchUsersColors[msg.tags.username])+'">'+
                         msgbadgestext +
                         '<a href="https://www.twitch.tv/'+msg.tags.username+'" target="_blank" class="twitch-name">' +
                             escapeHtml(msg.tags["display-name"]) +
