@@ -31,10 +31,23 @@ if(!file_exists("names/$videoname"))
     $streamname = "⭐stream⭐";
 else $streamname = file_get_contents("names/$videoname");
 
-$starttimeformated = date("F j, Y, g:i:s a", strtotime($starttime)); //English
-//$starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //Russian
+date_default_timezone_set('Europe/Moscow');
+$starttimeformated = '';
+if(!strcmp(resolveLoc('lang_code'), 'ru'))
+    $starttimeformated = date("d F Y г., H:i:s", strtotime($starttime)); //Russian
+else
+    $starttimeformated = date("F j, Y, g:i:s a", strtotime($starttime)); //English
 //This is wrong. Exists IntlDateFormatter.
-//Should we use User timezone or Saya's timezone (Europe/Moscow)?
+//Should we use user's timezone or Saya's timezone (Europe/Moscow)?
+
+//$fmt = datefmt_create( // gives Error: Call to undefined function datefmt_create()
+//    resolveLoc('lang_code'),
+//    IntlDateFormatter::LONG,
+//    IntlDateFormatter::LONG,
+//    'Europe/Moscow',
+//    IntlDateFormatter::GREGORIAN
+//);
+//$starttimeformated = datefmt_format($fmt, strtotime($starttime));
 ?>
 
 <!DOCTYPE html>
