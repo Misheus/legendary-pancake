@@ -1,7 +1,7 @@
 {
 	"lang_code": "en",
 	"video_not_exists": "Requested video does not exists",
-	"description_not_found": "Error loading description. May be it doesn't exists.",
+	"description_not_found": "Error loading description. May be it doesn't exist.",
 	"collapse": "Collapse",
 	"expand": "Expand",
 	"addtoplaylist": "Add to playlist",
