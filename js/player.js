@@ -18,6 +18,7 @@ const touchplaybtn = document.querySelector('#touchplaybtn')
 //const mainnextbtn = document.querySelector('#mainnextbtn')
 //const touchnextbtn = document.querySelector('#touchnextbtn')
 const mutebtn = document.querySelector('#mutebtn')
+const screenshotbtn = document.querySelector('#screenshotbtn')
 const settingsbtn = document.querySelector('#settingsbtn')
 const settingsclosebtn = document.querySelector('.settings-bg')
 const semifsbtn = document.querySelector('#semifsbtn')
@@ -34,6 +35,8 @@ const langsel = document.querySelector('#langsel')
 const chatcollapsebutton = document.querySelector('#chatcollapsebutton')
 const chatcollapse = document.querySelector('#chatcollapse')
 const descriptioncollapsebutton = document.querySelector('#descriptioncollapsebutton')
+const screenshotextsel = document.querySelector('#screenshotextsel')
+const screenshotqsel = document.querySelector('#screenshotqsel')
 
 let touchscreen = true;//switch betwwen touchscreen mode and mouse mode if user does so
 window.addEventListener('mousemove', ()=> {
@@ -189,6 +192,34 @@ video.addEventListener('loadedmetadata', ()=>{
     document.addEventListener('fullscreenchange', ()=>{
         if(!document.fullscreenElement)
             playeritself.dataset.fullscreen = fullscreenmode = 0;
+    })
+    if(!localStorage.getItem('screenshotJpgQuality')) localStorage.setItem('screenshotJpgQuality', "90")
+    if(!localStorage.getItem('screenshotExt')) localStorage.setItem('screenshotExt', "jpg")
+    screenshotqsel.value = parseInt(localStorage.getItem('screenshotJpgQuality'))
+    screenshotextsel.value = localStorage.getItem('screenshotExt')
+    screenshotqsel.addEventListener('change', ()=>{
+        localStorage.setItem('screenshotJpgQuality', screenshotqsel.value)
+    })
+    screenshotextsel.addEventListener('change', ()=>{
+        localStorage.setItem('screenshotExt', screenshotextsel.value)
+    })
+
+    const canvas = document.createElement('canvas')
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    canvas.promiseBlob = function(mimeType, qualityArgument) {
+        return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
+    };
+    screenshotbtn.addEventListener('click', async ()=>{
+        let context = canvas.getContext('2d')
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+        let url = window.URL.createObjectURL(await canvas.promiseBlob(
+            localStorage.getItem('screenshotExt')==='png'?'image/png':'image/jpeg',
+            parseInt(localStorage.getItem('screenshotJpgQuality'))/100))
+        let a = document.createElement('a')
+        a.href = url
+        a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
+        a.click()
     })
 
     let isseaking = false

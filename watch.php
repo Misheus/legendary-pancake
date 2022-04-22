@@ -155,6 +155,11 @@ else
                                         <path d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4.6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z" class="" fill="currentColor"/>
                                     </svg>
                                 </button>
+                                <button class="btn player-btn" id="screenshotbtn">
+                                    <svg focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 91.27" class="btn-icon">
+                                        <path d="M87.29,16.88A11.35,11.35,0,1,1,75.94,28.23,11.35,11.35,0,0,1,87.29,16.88Zm27.33,74.39H8.26a8.27,8.27,0,0,1-5.83-2.44h0A8.24,8.24,0,0,1,0,83V8.26A8.26,8.26,0,0,1,2.42,2.42h0A8.26,8.26,0,0,1,8.26,0H114.62a8.26,8.26,0,0,1,5.83,2.43h0a8.26,8.26,0,0,1,2.42,5.84V83a8.24,8.24,0,0,1-2.42,5.83h0a8.27,8.27,0,0,1-5.83,2.44Zm-7.35-9.43L87.6,50.46a4.52,4.52,0,0,0-7.65,0L70.66,65.39,80.77,81.84H76.62l-27.57-44c-2.54-3.39-6.61-3.13-8.88,0l-27,44H9.42V9.42h104V81.84Z" fill="currentColor" style="fill-rule:evenodd;"/>
+                                    </svg>
+                                </button>
                                 <button class="btn player-btn" id="semifsbtn">
                                     <svg focusable="false" data-state="enter" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="sfscr-btn-icon btn-icon">
                                         <path d="M10.2,106.8v303.3c0,33.5,27.1,60.6,60.6,60.6h363.4c33.5,0,60.6-27.1,60.6-60.6V106.9c0-33.4-27.1-60.6-60.6-60.6H70.6 l0,60.8h211.7l0.2,302.8l60.8,0V107.4l90.9-0.3l0,302.8l-363.6,0l0-363.6h0C37.2,46.4,10.2,73.4,10.2,106.8z" class="sfscr-btn-icon-enter" fill="currentColor"/>
@@ -181,6 +186,17 @@ else
                                 <option value="en">English</option>
                                 <option value="ru">Русский</option>
                             </select>
+                        </li>
+                        <li>
+                            <label for="screenshotextsel"><?php echo resolveLoc('screenshot.select.type'); ?>:</label>
+                            <select class="right-btn" id="screenshotextsel">
+                                <option value="png">PNG</option>
+                                <option value="jpg">JPG</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="screenshotqsel"><?php echo resolveLoc('screenshot.select.jpg.quality'); ?>:</label>
+                            <input class="right-btn" id="screenshotqsel" type="number" min="0" max="100">
                         </li>
                         <li class="work-in-progress"><?php echo resolveLoc('loop'); ?>: <button class="right-btn"><?php echo resolveLoc('yes'); ?></button><button class="settings-selected-btn"><?php echo resolveLoc('no'); ?></button></li>
                         <li class="work-in-progress"><input class="right-btn" type="text"><button>[</button> – <input type="text"><button>]</button></li>
