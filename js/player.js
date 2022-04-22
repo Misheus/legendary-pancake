@@ -458,6 +458,17 @@ if(chat){
         startindex = -1,
         db = false,
         initialSkip = false;
+
+    let lastmsg //элемент последнего на проигрываемый момент сообщения
+    let scrolledup = false //переменная для определения, прокрутили ли мы чат вверх
+    chatdiv.parentElement.addEventListener('scroll', ()=>{
+        if(lastmsg) scrolledup = chatdiv.parentElement.scrollTop < lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight
+    })
+    function scrollChat(){
+        if(!scrolledup && lastmsg) chatdiv.parentElement.scroll(0, lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight)
+    }
+    window.addEventListener('resize', scrollChat)
+
     video.ontimeupdate = () => {
         let now = starttime+video.currentTime*1000
         if(Math.abs(video.currentTime - lasttime) > 300) {//перемотали //todo при перемотке назад проверять, отрисовано ли уже сообщение, которое нужно будет показать и, если да - пролистывать, а если нет - переинициализировать чат.
@@ -480,7 +491,7 @@ if(chat){
                         newmsg.style.textAlign = 'center';
                         newmsg.id = 'skipedmsg'
                         chatdiv.appendChild(newmsg)
-                        chatdiv.parentElement.scroll(0, chatdiv.parentElement.scrollHeight - chatdiv.parentElement.offsetHeight)
+                        //chatdiv.parentElement.scroll(0, chatdiv.parentElement.scrollHeight - chatdiv.parentElement.offsetHeight)
                         startindex = index - 1
                         break
                     }
@@ -522,7 +533,7 @@ if(chat){
             if(msg <= now || video.currentTime+2 >= video.duration)
             {
                 displayChatMessage(chat[i])
-                chatdiv.parentElement.scroll(0, chatdiv.parentElement.scrollHeight - chatdiv.parentElement.offsetHeight)
+                //chatdiv.parentElement.scroll(0, chatdiv.parentElement.scrollHeight - chatdiv.parentElement.offsetHeight)
                 if(i === chat.length-1) index = chat.length
             }
             /*else if(msg > now && i === index) {
@@ -547,7 +558,11 @@ if(chat){
                 {
                     let el = document.getElementById((yt?Date.parse(chat[i].snippet.publishedAt):parseInt(chat[i].tags["tmi-sent-ts"])))
                     //console.log(el)
-                    if(el) chatdiv.parentElement.scroll(0, el.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+el.offsetHeight)
+                    if(el)
+                    {
+                        lastmsg = el
+                        scrollChat() //исправленный скролл при небольшой перемотке назад
+                    }
                     else chatdiv.parentElement.scroll(0, 0)
                     console.timeEnd('shit')
                     return;//todo сделать оптимизацию. Не перебирать каждый раз все элементы с конца, а только предыдущий
@@ -652,7 +667,8 @@ if(chat){
 
         if(toEnd) {
             chatdiv.appendChild(newmsg)
-            //chatdiv.parentElement.scroll(0, chatdiv.parentElement.scrollHeight - chatdiv.parentElement.offsetHeight)
+            lastmsg = newmsg
+            scrollChat() //исправленный скролл при инициализации сообщений
         }
         else {
             document.getElementById('skipedmsg').after(newmsg)
