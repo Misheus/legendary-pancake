@@ -335,7 +335,7 @@ else
                     <div><span class="work-in-progress">123 456 gпросмотров ● </span><time datetime="<?php echo $starttime; ?>"></time></div>
                     <h3><?php echo resolveLocf('githubtext', '<a href="https://github.com/Misheus/legendary-pancake" target="_blank">GitHub</a>'); ?></h3>
                     <div class="desc-row">
-                        <img class="saya-pfp" src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="Saya Scarlet pfp">
+                        <img class="saya-pfp" src="https://yt4.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="Saya Scarlet pfp">
                         <div class="dasc-saya-data">
                             <div class="flex">
                                 <span>Saya Scarlet</span>

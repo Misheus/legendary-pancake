@@ -567,7 +567,7 @@ if(chat){
             newmsg.id = Date.parse(msg.snippet.publishedAt)
             newmsg.innerHTML =
                 '<a href="'+msg.authorDetails.channelUrl+'" target="_blank" class="chat-pfp">' +
-                '<img alt="" src="'+msg.authorDetails.profileImageUrl+'">' +
+                '<img alt="" src="'+msg.authorDetails.profileImageUrl.replace('yt3.ggpht.com', 'yt4.ggpht.com')+'">' +
                 '</a>' +
                 '<div class="message-text">' +
                 '<span class="chat-time" onclick="video.currentTime='+(Date.parse(msg.snippet.publishedAt)-starttime)/1000+'">'+convertTime(msg.snippet.publishedAt)+' </span>' +
