@@ -84,7 +84,7 @@ else
         <div class="flex-container" id="playeritself" data-fullscreen="0">
             <div class="flex-container-left">
                 <video src="<?php echo $video ?>"></video>
-                <div class="video-controls">
+                <div class="video-controls" id="videocontrolsbackground">
                     <div class="video-controls-top">
                         <h2 class="player-name"><?php echo $streamname; ?>, <em><time datetime="<?php echo $starttime; ?>"></time></em></h2>
                     </div>

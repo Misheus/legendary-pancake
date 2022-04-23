@@ -479,25 +479,35 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
     font-size: calc(var(--base-font-size) * 1.7);
 }
 
-#playeritself.inactive .video-controls {
-    /*animation: fadeOut 500ms linear;*/
-    animation-name: fadeOut;
-    animation-duration: 500ms;
-    animation-fill-mode: forwards;
+#playeritself.inactive .video-controls > * {
+    animation: fadeOut 500ms forwards;
+    cursor: none;
+    overflow: hidden;
     /*Ёбаный рот этих анимаций! Нихуя не работает. Курсор не ноне, дисплей не ноне, как дебажить я не ебу.
      fixme not always working cursor: none and we still can click on buttons but shouldn't
      I don't know how to do this and I заебался with CSS so github repo is open for pull requests*/
 }
-#playeritself.inactive .video-controls {
-    cursor: none;
+
+.player-name::after,
+.video-controls-bottom-inner::before,
+.video-controls > * {
+    pointer-events: none;
+}
+.video-controls > * > * {
+    pointer-events: auto;
 }
 
 @keyframes fadeOut {
-    0% { opacity: 1 }
+    0% {
+        opacity: 1;
+        width: auto;
+    }
+    99% {
+        width: auto;
+    }
     100% {
         opacity: 0;
-        display: none;
-        cursor: none;
+        width: 0;/*Is this crutch???*/
     }
 }
 

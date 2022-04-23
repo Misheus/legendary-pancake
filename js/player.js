@@ -37,6 +37,7 @@ const chatcollapse = document.querySelector('#chatcollapse')
 const descriptioncollapsebutton = document.querySelector('#descriptioncollapsebutton')
 const screenshotextsel = document.querySelector('#screenshotextsel')
 const screenshotqsel = document.querySelector('#screenshotqsel')
+const videocontrolsbackground = document.querySelector('#videocontrolsbackground')
 
 let touchscreen = true;//switch betwwen touchscreen mode and mouse mode if user does so
 window.addEventListener('mousemove', ()=> {
@@ -105,8 +106,10 @@ document.addEventListener('click', e=>{
 description_text.innerHTML = parseTimecodedText(description)
 
 let inactivity = 0;
+let fullscreenmode = 0;//0 - nofs; 1 - semi-fs; 2 - fs
 video.addEventListener('loadedmetadata', ()=>{
     fcl.addEventListener('mousemove', ()=> {
+        if(touchscreen) return
         inactivity = 0
         playeritself.classList.remove('inactive')
     })
@@ -151,6 +154,55 @@ video.addEventListener('loadedmetadata', ()=>{
             fsbtn.firstElementChild.dataset.fs = 'false'
         }
     }, 100)
+
+    let clicked = false
+    let timeout = null
+    videocontrolsbackground.addEventListener('click', e => {
+        if(e.target !== e.currentTarget) return//ignore childrens
+        if (clicked) {
+            clearTimeout(timeout)
+            clicked = false
+            timeout = null
+            onvideodoubleclick(e)
+        } else {
+            clicked = true
+            timeout = setTimeout(() => {
+                clicked = false
+                timeout = null
+                onvideosingleclick(e)
+            }, 250)
+        }
+    })
+    function onvideodoubleclick(e) {
+        if(touchscreen) {
+            if(e.offsetX/videocontrolsbackground.clientWidth>0.5)
+                video.currentTime+=5
+            else video.currentTime-=5
+        } else {
+            if(fullscreenmode === 2) {//exit fs
+                document.exitFullscreen()
+                fullscreenmode = 0;
+            } else {
+                playeritself.requestFullscreen()
+                fullscreenmode = 2;
+            }
+            playeritself.dataset.fullscreen = fullscreenmode
+        }
+    }
+    function onvideosingleclick(e) {
+        if(touchscreen) {
+            if(inactivity<26) inactivity = 26
+            else {
+                inactivity = 0
+                playeritself.classList.remove('inactive')
+            }
+        } else {
+            if(video.paused) video.play()
+            else video.pause()
+        }
+    }
+
+
     mainplaybtn.addEventListener('click', ()=>{
         if(video.paused) video.play()
         else video.pause()
@@ -168,7 +220,6 @@ video.addEventListener('loadedmetadata', ()=>{
     settingsclosebtn.addEventListener('click', ()=> {
         videosettingsdiv.style.display = 'none'
     })
-    let fullscreenmode = 0;//0 - nofs; 1 - semi-fs; 2 - fs
     semifsbtn.addEventListener('click', ()=>{
         if(fullscreenmode === 1) {//exit fs
             document.exitFullscreen()
@@ -344,7 +395,15 @@ document.addEventListener('keydown', e=>{
         case 'KeyM':
             video.muted = !video.muted
             break;
-        case 'KeyF'://todo enter fullscreen
+        case 'KeyF':
+            if(fullscreenmode === 2) {//exit fs
+                document.exitFullscreen()
+                fullscreenmode = 0;
+            } else {
+                playeritself.requestFullscreen()
+                fullscreenmode = 2;
+            }
+            playeritself.dataset.fullscreen = fullscreenmode
             break;
     }
 })
