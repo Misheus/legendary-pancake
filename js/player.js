@@ -213,7 +213,7 @@ video.addEventListener('loadedmetadata', ()=>{
         if(video.paused) video.play()
         else video.pause()
     })
-    mutebtn.addEventListener('click', ()=>video.muted = !video.muted)
+    mutebtn.addEventListener('click', ()=>localStorage.setItem('mute', video.muted = !video.muted))
     //secondarymutebtn.addEventListener('click', ()=>video.muted = !video.muted)
     settingsbtn.addEventListener('click', ()=> {
         videosettingsdiv.style.display = ''
@@ -357,7 +357,7 @@ video.addEventListener('loadedmetadata', ()=>{
         if(vol > 1) vol = 1
         else if(vol < 0) vol = 0
         video.volume = vol
-        Cookies.set('volume', vol, { expires: 365, path: '/' })
+        localStorage.setItem('volume', vol)
     }
 })
 
@@ -367,11 +367,11 @@ document.addEventListener('keydown', e=>{
     playeritself.classList.remove('inactive')
     switch (e.code) {
         case 'ArrowUp':
-            video.volume = video.volume+.05>1?1:video.volume+.05
+            localStorage.setItem('volume',video.volume = video.volume+.05>1?1:video.volume+.05)
             e.preventDefault()
             break;
         case 'ArrowDown':
-            video.volume = video.volume-.05<0?0:video.volume-.05
+            localStorage.setItem('volume',video.volume = video.volume-.05<0?0:video.volume-.05)
             e.preventDefault()
             break;
         case 'ArrowLeft':
@@ -395,7 +395,7 @@ document.addEventListener('keydown', e=>{
             video.currentTime += 10
             break;
         case 'KeyM':
-            video.muted = !video.muted
+            localStorage.setItem('mute', video.muted = !video.muted)
             break;
         case 'KeyF':
             if(fullscreenmode === 2) {//exit fs
@@ -814,7 +814,8 @@ function secondsToTime(time){
 }
 
 langsel.value = Cookies.get('lang')
-video.volume = Cookies.get('volume')?parseFloat(Cookies.get('volume')):0.75
+video.volume = localStorage.getItem('volume')?parseFloat(localStorage.getItem('volume')):0.75
+if(localStorage.getItem('mute')==='true') video.muted = true
 
 langsel.addEventListener('change', ()=>{
     if(langsel.value !== Cookies.get('lang'))
