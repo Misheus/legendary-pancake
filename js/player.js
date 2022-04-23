@@ -210,9 +210,16 @@ video.addEventListener('loadedmetadata', ()=>{
     canvas.promiseBlob = function(mimeType, qualityArgument) {
         return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
     };
+    canvas.style.position = 'fixed'
+    canvas.style.top = canvas.style.left = '0'
+    canvas.style.width = '50%'
+    canvas.style.zIndex = '15'
+    document.body.appendChild(canvas)
     screenshotbtn.addEventListener('click', async ()=>{
         let context = canvas.getContext('2d')
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+        while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//for some unknown strange reasons this doesnt always work.
+        let myImageData = context.getImageData(0, 0, 1, 1);
         let url = window.URL.createObjectURL(await canvas.promiseBlob(
             localStorage.getItem('screenshotExt')==='png'?'image/png':'image/jpeg',
             parseInt(localStorage.getItem('screenshotJpgQuality'))/100))
@@ -220,6 +227,7 @@ video.addEventListener('loadedmetadata', ()=>{
         a.href = url
         a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
         a.click()
+        alert(myImageData.data[3])
     })
 
     let isseaking = false
