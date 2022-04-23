@@ -210,11 +210,6 @@ video.addEventListener('loadedmetadata', ()=>{
     canvas.promiseBlob = function(mimeType, qualityArgument) {
         return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
     };
-    canvas.style.position = 'fixed'
-    canvas.style.top = canvas.style.left = '0'
-    canvas.style.width = '50%'
-    canvas.style.zIndex = '15'
-    document.body.appendChild(canvas)
     screenshotbtn.addEventListener('click', async ()=>{
         let context = canvas.getContext('2d')
         while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
