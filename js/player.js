@@ -210,11 +210,29 @@ video.addEventListener('loadedmetadata', ()=>{
     canvas.promiseBlob = function(mimeType, qualityArgument) {
         return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
     };
-    screenshotbtn.addEventListener('click', async ()=>{
+    let EbanyiScreenhotTrys = 0
+    async function doEbanyiScreenshot() {
+        //for some unknown strange reasons context.drawImage() doesnt always work. Sometimes canvas remains transparent.
         let context = canvas.getContext('2d')
-        while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
-            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//for some unknown strange reasons this doesnt always work.
-        let myImageData = context.getImageData(0, 0, 1, 1);
+        //while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+        //try first time
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+        if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try second time
+        if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try third time
+        if(!context.getImageData(0, 0, 1, 1).data[3]) { //check top left pixel opacity
+            if(EbanyiScreenhotTrys > 4) {
+                //giving up
+                EbanyiScreenhotTrys = 0;
+                alert(resolveLoc('screenshot.error'))
+                return
+            }
+            setTimeout(doEbanyiScreenshot, 100)//wait 100ms and try again from start
+            EbanyiScreenhotTrys++
+            return
+        }
+        EbanyiScreenhotTrys = 0;
         let url = window.URL.createObjectURL(await canvas.promiseBlob(
             localStorage.getItem('screenshotExt')==='png'?'image/png':'image/jpeg',
             parseInt(localStorage.getItem('screenshotJpgQuality'))/100))
@@ -222,7 +240,8 @@ video.addEventListener('loadedmetadata', ()=>{
         a.href = url
         a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
         a.click()
-    })
+    }
+    screenshotbtn.addEventListener('click', doEbanyiScreenshot)
 
     let isseaking = false
     seekbarbtn.addEventListener('mousedown', e=> {
