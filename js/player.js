@@ -222,7 +222,6 @@ video.addEventListener('loadedmetadata', ()=>{
         a.href = url
         a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
         a.click()
-        alert(myImageData.data[3])
     })
 
     let isseaking = false
