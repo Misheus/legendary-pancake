@@ -197,6 +197,8 @@ video.addEventListener('loadedmetadata', ()=>{
                 playeritself.classList.remove('inactive')
             }
         } else {
+            inactivity = 0
+            playeritself.classList.remove('inactive')
             if(video.paused) video.play()
             else video.pause()
         }
