@@ -38,6 +38,7 @@ const descriptioncollapsebutton = document.querySelector('#descriptioncollapsebu
 const screenshotextsel = document.querySelector('#screenshotextsel')
 const screenshotqsel = document.querySelector('#screenshotqsel')
 const videocontrolsbackground = document.querySelector('#videocontrolsbackground')
+const gaincontrolinput = document.querySelector('#gaincontrolinput')
 
 let touchscreen = true;//switch betwwen touchscreen mode and mouse mode if user does so
 window.addEventListener('mousemove', ()=> {
@@ -108,6 +109,18 @@ description_text.innerHTML = parseTimecodedText(description)
 let inactivity = 0;
 let fullscreenmode = 0;//0 - nofs; 1 - semi-fs; 2 - fs
 video.addEventListener('loadedmetadata', ()=>{
+    //audio gain
+    video.addEventListener('play', ()=>{
+        let audioContext = new AudioContext()//this shit can not be just writen because google is stupid and not allowing creation audiocontext before user clicks page ( https://goo.gl/7K7WLu ) But this is not autoplay. And how youtube has autoplay? Fuck you, google!
+        let acVideo = audioContext.createMediaElementSource(video)
+        let gainNode = new GainNode(audioContext, {gain: 1})
+        acVideo.connect(gainNode)
+        gainNode.connect(audioContext.destination)
+        gaincontrolinput.addEventListener('change', ()=>{
+            gainNode.gain.value = 10**(parseInt(gaincontrolinput.value)/20)
+        })
+    }, {once: true})
+
     fcl.addEventListener('mousemove', ()=> {
         if(touchscreen) return
         inactivity = 0
@@ -362,32 +375,28 @@ video.addEventListener('loadedmetadata', ()=>{
 })
 
 document.addEventListener('keydown', e=>{
+    if(document.activeElement.tagName === 'INPUT') return
     //console.log(e.code);
     inactivity = 0
     playeritself.classList.remove('inactive')
     switch (e.code) {
         case 'ArrowUp':
             localStorage.setItem('volume',video.volume = video.volume+.05>1?1:video.volume+.05)
-            e.preventDefault()
             break;
         case 'ArrowDown':
             localStorage.setItem('volume',video.volume = video.volume-.05<0?0:video.volume-.05)
-            e.preventDefault()
             break;
         case 'ArrowLeft':
             video.currentTime -= 5
-            e.preventDefault()
             break;
         case 'ArrowRight':
             video.currentTime += 5
-            e.preventDefault()
             break;
         case 'KeyJ':
             video.currentTime -= 10
             break;
         case 'Space':
         case 'KeyK':
-            e.preventDefault()
             if(video.paused) video.play()
             else video.pause()
             break;
@@ -408,6 +417,7 @@ document.addEventListener('keydown', e=>{
             playeritself.dataset.fullscreen = fullscreenmode
             break;
     }
+    e.preventDefault()
 })
 
 

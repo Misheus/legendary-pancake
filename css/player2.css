@@ -129,7 +129,6 @@ video {
 }
 
 .settings-bg {
-    content: ' ';
     position: fixed;
     inset: 0 0 0 0;
     z-index: -1;
@@ -149,6 +148,7 @@ video {
 .video-settings > ul > li > input {
     width: 75px;
 }
+
 
 .settings-selected-btn {
     background: blue;
@@ -454,6 +454,7 @@ body[data-touchscreen="true"] .video-controls-middle-inner {
          * вы можете это реализовать. (Мне просто страшно тут что-то менять.)
          */
     }
+    .gain-control,
     .video-settings {
         top: 1%;
         bottom: revert;

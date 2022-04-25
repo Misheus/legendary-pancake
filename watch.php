@@ -198,6 +198,12 @@ else
                             <label for="screenshotqsel"><?php echo resolveLoc('screenshot.select.jpg.quality'); ?>:</label>
                             <input class="right-btn" id="screenshotqsel" type="number" min="0" max="100">
                         </li>
+                        <li>
+                            <label>
+                                <?php echo resolveLoc('gain'); ?>
+                                <input class="right-btn" type="number" style="width: 50px;" id="gaincontrolinput" value="0">
+                            </label>
+                        </li>
                         <li class="work-in-progress"><?php echo resolveLoc('loop'); ?>: <button class="right-btn"><?php echo resolveLoc('yes'); ?></button><button class="settings-selected-btn"><?php echo resolveLoc('no'); ?></button></li>
                         <li class="work-in-progress"><input class="right-btn" type="text"><button>[</button> – <input type="text"><button>]</button></li>
                         <li class="work-in-progress"><?php echo resolveLoc('marksongstimeline'); ?>: <button class="right-btn settings-selected-btn"><?php echo resolveLoc('yes'); ?></button><button><?php echo resolveLoc('no'); ?></button></li>
@@ -235,110 +241,7 @@ else
                     <a class="hide-button-middle" id="chatcollapsebutton"><?php echo resolveLoc('collapse'); ?></a>
                     <div class="chat" id="chatcollapse" data-collapsed="false">
                         <div class="chat-messages">
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="chat-message">-->
-<!--                                <img src="https://yt3.ggpht.com/ytc/AKedOLTeOULZ_c76LSlS6RK-wjV_FyDdowIxpShcMdC43w=s88-c-k-c0x00ffffff-no-rj" alt="profile picture" class="chat-pfp">-->
-<!--                                <div class="message-text">-->
-<!--                                    <a class="chat-time">15:04</a>-->
-<!--                                    <a class="chat-name">Saya Scarlet</a>:-->
-<!--                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut eros at nibh vehicula ornare nec ut lectus. Vivamus purus felis, fringilla at venenatis quis, ultricies non lorem.-->
-<!--                                </div>-->
-<!--                            </div>-->
+
                         </div>
                     </div>
                 </div>
