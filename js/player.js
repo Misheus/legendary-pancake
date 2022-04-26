@@ -132,7 +132,14 @@ setInterval(()=>{
         inactivity++
     }
     //updating all shit
-    let buffer =  (video.buffered.length > 0 ? video.buffered.end(video.buffered.length-1):0.0);
+    //let buffer =  (video.buffered.length > 0 ? video.buffered.end(video.buffered.length-1):0.0);
+    let buffer
+    if(!video.buffered.length) buffer = 0.0
+    else for(let i = video.buffered.length-1; i>=0; i--)
+            if(video.buffered.start(i) < video.currentTime) {
+                buffer = video.buffered.end(i);
+                break;
+            }
 
     timeplayedel.innerText = secondsToTime(video.currentTime)
     barbufferedel.style.width = (buffer/video.duration*100||0)+"%"
