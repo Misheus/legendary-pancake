@@ -108,144 +108,85 @@ description_text.innerHTML = parseTimecodedText(description)
 
 let inactivity = 0;
 let fullscreenmode = 0;//0 - nofs; 1 - semi-fs; 2 - fs
-video.addEventListener('loadedmetadata', ()=>{
-    //audio gain
-    video.addEventListener('play', ()=>{
-        let audioContext = new AudioContext()//this shit can not be just writen because google is stupid and not allowing creation audiocontext before user clicks page ( https://goo.gl/7K7WLu ) But this is not autoplay. And how youtube has autoplay? Fuck you, google!
-        let acVideo = audioContext.createMediaElementSource(video)
-        let gainNode = new GainNode(audioContext, {gain: 1})
-        acVideo.connect(gainNode)
-        gainNode.connect(audioContext.destination)
-        gaincontrolinput.addEventListener('change', ()=>{
-            gainNode.gain.value = 10**(parseInt(gaincontrolinput.value)/20)
-        })
-    }, {once: true})
-
-    fcl.addEventListener('mousemove', ()=> {
-        if(touchscreen) return
-        inactivity = 0
-        playeritself.classList.remove('inactive')
+//audio gain
+video.addEventListener('play', ()=>{
+    let audioContext = new AudioContext()//this shit can not be just writen because google is stupid and not allowing creation audiocontext before user clicks page ( https://goo.gl/7K7WLu ) But this is not autoplay. And how youtube has autoplay? Fuck you, google!
+    let acVideo = audioContext.createMediaElementSource(video)
+    let gainNode = new GainNode(audioContext, {gain: 1})
+    acVideo.connect(gainNode)
+    gainNode.connect(audioContext.destination)
+    gaincontrolinput.addEventListener('change', ()=>{
+        gainNode.gain.value = 10**(parseInt(gaincontrolinput.value)/20)
     })
-    timeallel.innerText = secondsToTime(video.duration)
-    setInterval(()=>{
-        if(inactivity > 25) {
-            playeritself.classList.add('inactive')
-        } else if (!video.paused){
-            inactivity++
-        }
-        //updating all shit
-        let timeall = video.duration
-        let time = video.currentTime;
-        let buffer =  (video.buffered.length > 0 ? video.buffered.end(video.buffered.length-1):0.0);
+}, {once: true})
 
-        timeplayedel.innerText = secondsToTime(time)
-        barbufferedel.style.width = buffer/timeall*100+"%"
-        barplayedel.style.width = time/timeall*100+"%"
-        primaryvolumebar.style.width = video.volume*100+"%"
+fcl.addEventListener('mousemove', ()=> {
+    if(touchscreen) return
+    inactivity = 0
+    playeritself.classList.remove('inactive')
+})
+setInterval(()=>{
+    if(inactivity > 25) {
+        playeritself.classList.add('inactive')
+    } else if (!video.paused){
+        inactivity++
+    }
+    //updating all shit
+    let buffer =  (video.buffered.length > 0 ? video.buffered.end(video.buffered.length-1):0.0);
 
-        if (video.paused) {
-            mainplaybtn.firstElementChild.dataset.state =
+    timeplayedel.innerText = secondsToTime(video.currentTime)
+    barbufferedel.style.width = (buffer/video.duration*100||0)+"%"
+    barplayedel.style.width = (video.currentTime/video.duration*100||0)+"%"
+    primaryvolumebar.style.width = video.volume*100+"%"
+
+    if (video.paused) {
+        mainplaybtn.firstElementChild.dataset.state =
             touchplaybtn.firstElementChild.dataset.state = 'play'
-        } else {
-            mainplaybtn.firstElementChild.dataset.state =
+    } else {
+        mainplaybtn.firstElementChild.dataset.state =
             touchplaybtn.firstElementChild.dataset.state = 'pause'
-        }
+    }
 
-        if(video.muted) mutebtn.firstElementChild.dataset.volume = "m"
-        else {
-            mutebtn.firstElementChild.dataset.volume = Math.round(video.volume*3)
-        }
+    if(video.muted) mutebtn.firstElementChild.dataset.volume = "m"
+    else {
+        mutebtn.firstElementChild.dataset.volume = Math.round(video.volume*3)
+    }
 
-        if(fullscreenmode === 0) {
-            semifsbtn.firstElementChild.dataset.state = 'enter'
-            fsbtn.firstElementChild.dataset.fs = 'true'
-        } else if(fullscreenmode === 1) {
-            semifsbtn.firstElementChild.dataset.state = 'exit'
-            fsbtn.firstElementChild.dataset.fs = 'true'
-        } else if(fullscreenmode === 2) {
-            semifsbtn.firstElementChild.dataset.state = 'enter'
-            fsbtn.firstElementChild.dataset.fs = 'false'
-        }
-    }, 100)
-
-    let clicked = false
-    let timeout = null
-    videocontrolsbackground.addEventListener('click', e => {
-        if(e.target !== e.currentTarget) return//ignore childrens
-        if (clicked) {
-            clearTimeout(timeout)
+    if(fullscreenmode === 0) {
+        semifsbtn.firstElementChild.dataset.state = 'enter'
+        fsbtn.firstElementChild.dataset.fs = 'true'
+    } else if(fullscreenmode === 1) {
+        semifsbtn.firstElementChild.dataset.state = 'exit'
+        fsbtn.firstElementChild.dataset.fs = 'true'
+    } else if(fullscreenmode === 2) {
+        semifsbtn.firstElementChild.dataset.state = 'enter'
+        fsbtn.firstElementChild.dataset.fs = 'false'
+    }
+}, 100)
+let clicked = false
+let timeout = null
+videocontrolsbackground.addEventListener('click', e => {
+    if(e.target !== e.currentTarget) return//ignore childrens
+    if (clicked) {
+        clearTimeout(timeout)
+        clicked = false
+        timeout = null
+        onvideodoubleclick(e)
+    } else {
+        clicked = true
+        timeout = setTimeout(() => {
             clicked = false
             timeout = null
-            onvideodoubleclick(e)
-        } else {
-            clicked = true
-            timeout = setTimeout(() => {
-                clicked = false
-                timeout = null
-                onvideosingleclick(e)
-            }, 250)
-        }
-    })
-    function onvideodoubleclick(e) {
-        if(touchscreen) {
-            if(e.offsetX/videocontrolsbackground.clientWidth>0.5)
-                video.currentTime+=5
-            else video.currentTime-=5
-        } else {
-            if(fullscreenmode === 2) {//exit fs
-                document.exitFullscreen()
-                fullscreenmode = 0;
-            } else {
-                playeritself.requestFullscreen()
-                fullscreenmode = 2;
-            }
-            playeritself.dataset.fullscreen = fullscreenmode
-        }
+            onvideosingleclick(e)
+        }, 250)
     }
-    function onvideosingleclick(e) {
-        if(touchscreen) {
-            if(inactivity<26) inactivity = 26
-            else {
-                inactivity = 0
-                playeritself.classList.remove('inactive')
-            }
-        } else {
-            inactivity = 0
-            playeritself.classList.remove('inactive')
-            if(video.paused) video.play()
-            else video.pause()
-        }
-    }
-
-
-    mainplaybtn.addEventListener('click', ()=>{
-        if(video.paused) video.play()
-        else video.pause()
-    })
-    touchplaybtn.addEventListener('click', ()=>{
-        if(video.paused) video.play()
-        else video.pause()
-    })
-    mutebtn.addEventListener('click', ()=>localStorage.setItem('mute', video.muted = !video.muted))
-    //secondarymutebtn.addEventListener('click', ()=>video.muted = !video.muted)
-    settingsbtn.addEventListener('click', ()=> {
-        videosettingsdiv.style.display = ''
-        //videosettingsdiv.focus()todo move focus to this shit
-    })
-    settingsclosebtn.addEventListener('click', ()=> {
-        videosettingsdiv.style.display = 'none'
-    })
-    semifsbtn.addEventListener('click', ()=>{
-        if(fullscreenmode === 1) {//exit fs
-            document.exitFullscreen()
-            fullscreenmode = 0;
-        } else {
-            playeritself.requestFullscreen()
-            fullscreenmode = 1;
-        }
-        playeritself.dataset.fullscreen = fullscreenmode
-    })
-    fsbtn.addEventListener('click', ()=>{
+})
+function onvideodoubleclick(e) {
+    if(touchscreen) {
+        if(e.offsetX/videocontrolsbackground.clientWidth>0.5)
+            video.currentTime+=5
+        else video.currentTime-=5
+    } else {
         if(fullscreenmode === 2) {//exit fs
             document.exitFullscreen()
             fullscreenmode = 0;
@@ -254,60 +195,150 @@ video.addEventListener('loadedmetadata', ()=>{
             fullscreenmode = 2;
         }
         playeritself.dataset.fullscreen = fullscreenmode
-    })
-    document.addEventListener('fullscreenchange', ()=>{
-        if(!document.fullscreenElement)
-            playeritself.dataset.fullscreen = fullscreenmode = 0;
-    })
-    if(!localStorage.getItem('screenshotJpgQuality')) localStorage.setItem('screenshotJpgQuality', "90")
-    if(!localStorage.getItem('screenshotExt')) localStorage.setItem('screenshotExt', "jpg")
-    screenshotqsel.value = parseInt(localStorage.getItem('screenshotJpgQuality'))
-    screenshotextsel.value = localStorage.getItem('screenshotExt')
-    screenshotqsel.addEventListener('change', ()=>{
-        localStorage.setItem('screenshotJpgQuality', screenshotqsel.value)
-    })
-    screenshotextsel.addEventListener('change', ()=>{
-        localStorage.setItem('screenshotExt', screenshotextsel.value)
-    })
+    }
+}
+function onvideosingleclick(e) {
+    if(touchscreen) {
+        if(inactivity<26) inactivity = 26
+        else {
+            inactivity = 0
+            playeritself.classList.remove('inactive')
+        }
+    } else {
+        inactivity = 0
+        playeritself.classList.remove('inactive')
+        if(video.paused) video.play()
+        else video.pause()
+    }
+}
 
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    canvas.promiseBlob = function(mimeType, qualityArgument) {
-        return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
-    };
-    let EbanyiScreenhotTrys = 0
-    async function doEbanyiScreenshot() {
-        //for some unknown strange reasons context.drawImage() doesnt always work. Sometimes canvas remains transparent.
-        let context = canvas.getContext('2d')
-        //while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
-        //try first time
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
-        if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
-            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try second time
-        if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
-            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try third time
-        if(!context.getImageData(0, 0, 1, 1).data[3]) { //check top left pixel opacity
-            if(EbanyiScreenhotTrys > 4) {
-                //giving up
-                EbanyiScreenhotTrys = 0;
-                alert(resolveLoc('screenshot.error'))
-                return
-            }
-            setTimeout(doEbanyiScreenshot, 100)//wait 100ms and try again from start
-            EbanyiScreenhotTrys++
+
+mainplaybtn.addEventListener('click', ()=>{
+    if(video.paused) video.play()
+    else video.pause()
+})
+touchplaybtn.addEventListener('click', ()=>{
+    if(video.paused) video.play()
+    else video.pause()
+})
+mutebtn.addEventListener('click', ()=>localStorage.setItem('mute', video.muted = !video.muted))
+//secondarymutebtn.addEventListener('click', ()=>video.muted = !video.muted)
+settingsbtn.addEventListener('click', ()=> {
+    videosettingsdiv.style.display = ''
+    //videosettingsdiv.focus()todo move focus to this shit
+})
+settingsclosebtn.addEventListener('click', ()=> {
+    videosettingsdiv.style.display = 'none'
+})
+semifsbtn.addEventListener('click', ()=>{
+    if(fullscreenmode === 1) {//exit fs
+        document.exitFullscreen()
+        fullscreenmode = 0;
+    } else {
+        playeritself.requestFullscreen()
+        fullscreenmode = 1;
+    }
+    playeritself.dataset.fullscreen = fullscreenmode
+})
+fsbtn.addEventListener('click', ()=>{
+    if(fullscreenmode === 2) {//exit fs
+        document.exitFullscreen()
+        fullscreenmode = 0;
+    } else {
+        playeritself.requestFullscreen()
+        fullscreenmode = 2;
+    }
+    playeritself.dataset.fullscreen = fullscreenmode
+})
+document.addEventListener('fullscreenchange', ()=>{
+    if(!document.fullscreenElement)
+        playeritself.dataset.fullscreen = fullscreenmode = 0;
+})
+if(!localStorage.getItem('screenshotJpgQuality')) localStorage.setItem('screenshotJpgQuality', "90")
+if(!localStorage.getItem('screenshotExt')) localStorage.setItem('screenshotExt', "jpg")
+screenshotqsel.value = parseInt(localStorage.getItem('screenshotJpgQuality'))
+screenshotextsel.value = localStorage.getItem('screenshotExt')
+screenshotqsel.addEventListener('change', ()=>{
+    localStorage.setItem('screenshotJpgQuality', screenshotqsel.value)
+})
+screenshotextsel.addEventListener('change', ()=>{
+    localStorage.setItem('screenshotExt', screenshotextsel.value)
+})
+
+const canvas = document.createElement('canvas')
+canvas.width = video.videoWidth
+canvas.height = video.videoHeight
+canvas.promiseBlob = function(mimeType, qualityArgument) {
+    return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
+};
+let EbanyiScreenhotTrys = 0
+async function doEbanyiScreenshot() {
+    //for some unknown strange reasons context.drawImage() doesnt always work. Sometimes canvas remains transparent.
+    let context = canvas.getContext('2d')
+    //while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+    //try first time
+    context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+    if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try second time
+    if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try third time
+    if(!context.getImageData(0, 0, 1, 1).data[3]) { //check top left pixel opacity
+        if(EbanyiScreenhotTrys > 4) {
+            //giving up
+            EbanyiScreenhotTrys = 0;
+            alert(resolveLoc('screenshot.error'))
             return
         }
-        EbanyiScreenhotTrys = 0;
-        let url = window.URL.createObjectURL(await canvas.promiseBlob(
-            localStorage.getItem('screenshotExt')==='png'?'image/png':'image/jpeg',
-            parseInt(localStorage.getItem('screenshotJpgQuality'))/100))
-        let a = document.createElement('a')
-        a.href = url
-        a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
-        a.click()
+        setTimeout(doEbanyiScreenshot, 100)//wait 100ms and try again from start
+        EbanyiScreenhotTrys++
+        return
     }
-    screenshotbtn.addEventListener('click', doEbanyiScreenshot)
+    EbanyiScreenhotTrys = 0;
+    let url = window.URL.createObjectURL(await canvas.promiseBlob(
+        localStorage.getItem('screenshotExt')==='png'?'image/png':'image/jpeg',
+        parseInt(localStorage.getItem('screenshotJpgQuality'))/100))
+    let a = document.createElement('a')
+    a.href = url
+    a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
+    a.click()
+}
+let isvoluming = false
+primaryvolumechangebtn.addEventListener('mousedown', e=> {
+    isvoluming = true
+    e.preventDefault()
+    changevolume(e)
+})
+primaryvolumechangebtn.addEventListener('touchstart', e=> {
+    isvoluming = true
+    e.preventDefault()
+    changevolume(e)
+})
+document.addEventListener('mouseup', e=> {
+    isvoluming = false
+})
+document.addEventListener('touchend', e=> {
+    isvoluming = false
+})
+document.addEventListener('mousemove', e=>{
+    if (!isvoluming) return
+    changevolume(e)
+})
+document.addEventListener('touchmove', e=>{
+    if (!isvoluming) return
+    changevolume(e)
+})
+function changevolume(e) {
+    //console.log(e)
+    let vol = ((e.x!==undefined?e.x:e.changedTouches[0].clientX)-(primaryvolumechangebtn.getBoundingClientRect().left + window.scrollX))/primaryvolumechangebtn.clientWidth
+    if(vol > 1) vol = 1
+    else if(vol < 0) vol = 0
+    video.volume = vol
+    localStorage.setItem('volume', vol)
+}
+
+screenshotbtn.addEventListener('click', doEbanyiScreenshot)
+video.addEventListener('loadedmetadata', ()=>{
+    timeallel.innerText = secondsToTime(video.duration)
 
     let isseaking = false
     seekbarbtn.addEventListener('mousedown', e=> {
@@ -338,40 +369,6 @@ video.addEventListener('loadedmetadata', ()=>{
         //console.log(e)
         video.currentTime = ((e.x!==undefined?e.x:e.changedTouches[0].clientX)-(seekbarbtn.getBoundingClientRect().left + window.scrollX))/seekbarbtn.clientWidth*video.duration
     }
-
-    let isvoluming = false
-    primaryvolumechangebtn.addEventListener('mousedown', e=> {
-        isvoluming = true
-        e.preventDefault()
-        changevolume(e)
-    })
-    primaryvolumechangebtn.addEventListener('touchstart', e=> {
-        isvoluming = true
-        e.preventDefault()
-        changevolume(e)
-    })
-    document.addEventListener('mouseup', e=> {
-        isvoluming = false
-    })
-    document.addEventListener('touchend', e=> {
-        isvoluming = false
-    })
-    document.addEventListener('mousemove', e=>{
-        if (!isvoluming) return
-        changevolume(e)
-    })
-    document.addEventListener('touchmove', e=>{
-        if (!isvoluming) return
-        changevolume(e)
-    })
-    function changevolume(e) {
-        //console.log(e)
-        let vol = ((e.x!==undefined?e.x:e.changedTouches[0].clientX)-(primaryvolumechangebtn.getBoundingClientRect().left + window.scrollX))/primaryvolumechangebtn.clientWidth
-        if(vol > 1) vol = 1
-        else if(vol < 0) vol = 0
-        video.volume = vol
-        localStorage.setItem('volume', vol)
-    }
 })
 
 document.addEventListener('keydown', e=>{
@@ -381,15 +378,19 @@ document.addEventListener('keydown', e=>{
     playeritself.classList.remove('inactive')
     switch (e.code) {
         case 'ArrowUp':
+            e.preventDefault()
             localStorage.setItem('volume',video.volume = video.volume+.05>1?1:video.volume+.05)
             break;
         case 'ArrowDown':
+            e.preventDefault()
             localStorage.setItem('volume',video.volume = video.volume-.05<0?0:video.volume-.05)
             break;
         case 'ArrowLeft':
+            e.preventDefault()
             video.currentTime -= 5
             break;
         case 'ArrowRight':
+            e.preventDefault()
             video.currentTime += 5
             break;
         case 'KeyJ':
@@ -397,6 +398,7 @@ document.addEventListener('keydown', e=>{
             break;
         case 'Space':
         case 'KeyK':
+            e.preventDefault()
             if(video.paused) video.play()
             else video.pause()
             break;
@@ -417,7 +419,6 @@ document.addEventListener('keydown', e=>{
             playeritself.dataset.fullscreen = fullscreenmode
             break;
     }
-    e.preventDefault()
 })
 
 
