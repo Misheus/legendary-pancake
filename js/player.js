@@ -562,7 +562,7 @@ if(chat){
     let lastmsg //элемент последнего на проигрываемый момент сообщения
     let scrolledup = false //переменная для определения, прокрутили ли мы чат вверх
     chatdiv.parentElement.addEventListener('scroll', ()=>{
-        if(lastmsg) scrolledup = chatdiv.parentElement.scrollTop < lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight
+        if(lastmsg) scrolledup = chatdiv.parentElement.scrollTop < lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight-5
     })
     function scrollChat(){
         if(!scrolledup && lastmsg) chatdiv.parentElement.scroll(0, lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight)
