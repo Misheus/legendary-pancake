@@ -454,7 +454,6 @@ body[data-touchscreen="true"] .video-controls-middle-inner {
          * вы можете это реализовать. (Мне просто страшно тут что-то менять.)
          */
     }
-    .gain-control,
     .video-settings {
         top: 1%;
         bottom: revert;
