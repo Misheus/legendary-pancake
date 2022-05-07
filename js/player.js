@@ -51,7 +51,32 @@ window.addEventListener('touchend', ()=>{
 })
 window.addEventListener('touchstart', ()=> {
     document.body.dataset.touchscreen = touchscreen = true
-})
+}, {passive: false})
+/* Should passive: false be the default one?
+ * Why without passive: false it creates passive event listeber?
+ * Why this breaks another event listener for touchstart on volume and time bars, making event.cancellable == false?
+ * Why it does so only on specific devices?
+ * Why Artemka Reper tells me that I write bad code?
+ * How that works?
+ *
+ * This doc says that non-passive event listener on touchstart can add at least 500ms delay to scrolling in 1% of scrolls.
+ * https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#the-problem
+ * How? What you should do in that event handler to run for > 0.5s?
+ * Why people keeps creating non-existing problems, solving it, and making real ones?
+ * Who would read this? Why I wrote this?
+ *
+ * May be I should use CSS property touch-action: none; instead of event.preventDefault() but no one teaced me that.
+ * I don't know how to write code, if you still haven't noticed.
+ * Please someone answer all (or some) of this questions. You can contact me via:
+ * telepathy,
+ * vkontakte https://vk.com/misheus
+ * Discord https://discord.com/invite/npe57eJ
+ * Twitter https://twitter.com/Mysheus
+ * instagram https://www.instagram.com/kawaiiaustralopithecus/
+ * Telegram https://t.me/mysheus
+ * Github https://github.com/Misheus (github has DMs? I don't know. But I know it has comments on commits!)
+ * comments on this site (if in your future I wrote ones)
+ */
 
 //set video aspect ratio because CSS property not always work
 video.style.height = fcl.scrollWidth/16*9+'px'//is it always working? I don't thinl so... Someone, plese fix this. fixme sometimes this fires too late. maybe defer is not good at all times
