@@ -199,10 +199,10 @@ else
                             <input class="right-btn" id="screenshotqsel" type="number" min="0" max="100">
                         </li>
                         <li>
-                            <label>
+                            <label for="gaincontrolinput">
                                 <?php echo resolveLoc('gain'); ?>
-                                <input class="right-btn" type="number" style="width: 50px;" id="gaincontrolinput" value="0">
                             </label>
+                            <input class="right-btn" type="number" style="width: 50px;" id="gaincontrolinput" value="0">
                         </li>
                         <li class="work-in-progress"><?php echo resolveLoc('loop'); ?>: <button class="right-btn"><?php echo resolveLoc('yes'); ?></button><button class="settings-selected-btn"><?php echo resolveLoc('no'); ?></button></li>
                         <li class="work-in-progress"><input class="right-btn" type="text"><button>[</button> – <input type="text"><button>]</button></li>
