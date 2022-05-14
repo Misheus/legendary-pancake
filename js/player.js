@@ -119,13 +119,14 @@ function timeToSeconds(time) {
 }
 
 function parseTimecodedText(text) {
-    return text.replaceAll('\n', '<br>').replace(/(?:\d{1,2}:)?\d{1,2}:\d{1,2}/g, '<a href="watch?v='+GET.v+'&t=$&" data-timecodelink="$&" >$&</a>')
+    return text.replaceAll('\n', '<br>').replace(/(?:\d{1,2}:)?\d{1,2}:\d{1,2}/g, '<a href="watch?v='+GET.v+'&t=$&" data-timecodelink="$&" data-video="'+GET.v+'">$&</a>')
 }
 document.addEventListener('click', e=>{
-    if(e.target && e.target.dataset && e.target.dataset.timecodelink)
+    if(e.target && e.target.dataset && e.target.dataset.timecodelink && e.target.dataset.video === GET.v)
     {
         e.preventDefault()
         video.currentTime = timeToSeconds(e.target.dataset.timecodelink)
+        history.replaceState(null, "", `/watch?v=${GET.v}&t=${e.target.dataset.timecodelink}`)
     }
 })
 
