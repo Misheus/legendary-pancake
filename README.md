@@ -20,7 +20,7 @@ I don't remember. I setuped dev enviroment long time ago using OpenServer. But h
 11. ??????
 12. Profit!
 
-Used librarys https://github.com/ramlmn/Apache-Directory-Listing and https://github.com/js-cookie/js-cookie and seems to be all. Correct me if I forgot which libs I used.
+Used librarys https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/ and https://github.com/js-cookie/js-cookie and seems to be all. Correct me if I forgot which libs I used.
 ## \[RU]
 Это говно лежит тут для того, чтобы все неравнодушные могли его поправить.
 Это говно является моей попыткой в создание плеера для записей стримов [Сайи](https://www.youtube.com/c/TheSayaScarlet), которые есть только у меня.
@@ -43,4 +43,4 @@ Used librarys https://github.com/ramlmn/Apache-Directory-Listing and https://git
 11. ??????
 12. Профит!
 
-Использованы библиотеки https://github.com/ramlmn/Apache-Directory-Listing и https://github.com/js-cookie/js-cookie и вроде бы всё. Поправьте меня, если я забыл какие либы юзал.
+Использованы библиотеки https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/ и https://github.com/js-cookie/js-cookie и вроде бы всё. Поправьте меня, если я забыл какие либы юзал.
