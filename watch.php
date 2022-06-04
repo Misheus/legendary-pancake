@@ -1,6 +1,48 @@
 <?php
 
 require "lib/language.php";
+require "lib/mysql.php";
+
+// tracking
+
+if(!isset($_COOKIE['client-uuid']) || preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $_COOKIE['client-uuid']) !== 1)
+{
+    $_COOKIE['client-uuid'] = guidv4();
+    setcookie('client-uuid', $_COOKIE['client-uuid'], [
+        "expires" => time()+1314000,//1 year
+        "path" => "/",
+        "domain" => ".mysheus.ru",
+        "secure" => "true",
+        "samesite" => "Strict"
+    ]);
+}
+
+$entry = R::dispense('accesslog');
+$entry['uuid'] = $_COOKIE['client-uuid'];
+$entry['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+$entry['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'];
+$entry['useragent'] = $_SERVER['HTTP_USER_AGENT'];
+$entry['path'] = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+R::store($entry);
+
+
+
+function guidv4($data = null) {
+    // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+    $data = $data ?? random_bytes(16);
+    assert(strlen($data) == 16);
+
+    // Set version to 0100
+    $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+    // Set bits 6-7 to 10
+    $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+    // Output the 36 character UUID.
+    return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+}
+// /tracking
+
+
 
 if(!isset($_GET['v']) || !file_exists($_GET['v']))
 {
@@ -332,6 +374,12 @@ else
                 Комментарии туть.
             </div>
         </div>
+        <?php if(!isset($_COOKIE['cookies-accepted'])) {?>
+        <div class="cookies-shit">
+            <?php echo resolveLoc('cookiewarning.text')?>
+            <button class="right-btn" onclick="Cookies.set('cookies-accepted', 'true', { expires: 365, path: '/' }); this.parentNode.remove()"><?php echo resolveLoc('cookiewarning.button')?></button>
+        </div>
+        <?php }?>
     </main>
     <script src="/js/player.js"></script>
     <script src="/js/true-vh.js"></script>

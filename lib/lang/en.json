@@ -26,5 +26,7 @@
 	"chat.hiddenmessages.text": "Some messages are hidden because of seeking",
 	"screenshot.select.type": "Screenshot extension",
 	"screenshot.select.jpg.quality": "Screenshot quality for JPG",
-	"gain": "Audio gain (dB)"
+	"gain": "Audio gain (dB)",
+	"cookiewarning.text": "This site uses cookies and collects usage statistics, including data such as ip address and user-agent. By continuing to use the site you agree to these terms.",
+	"cookiewarning.button": "Accept"
 }

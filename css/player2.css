@@ -564,6 +564,34 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
     overflow: hidden;
 }
 
+.cookies-shit {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.5em;
+    font-size: 1.25rem;
+    background: #d3d3d3d3;
+    display: flex;
+    align-items: flex-start;
+    z-index: 999;
+}
+.cookies-shit::before {
+    content: ' ';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(0deg, #d3d3d3d3, #d3d3d300);
+    pointer-events: none;
+}
+.cookies-shit > button {
+    padding: 0.5em;
+    /*border-radius: 1.25em;*//*FIXME Why setting border-radius breaks all other user-agent's border- rules and :hover sate?*/
+    cursor: pointer;
+}
+
 .work-in-progress {
     display: none !important;
 }
