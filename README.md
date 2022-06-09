@@ -25,7 +25,7 @@ I don't remember. I setuped dev enviroment long time ago using OpenServer. But h
 16. ??????
 17. Profit!
 
-Used librarys https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/ and https://github.com/js-cookie/js-cookie and seems to be all. Correct me if I forgot which libs I used.
+Used librarys https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/, https://www.npmjs.com/package/mysql2 and https://github.com/js-cookie/js-cookie and seems to be all. Correct me if I forgot which libs I used.
 ## \[RU]
 Это говно лежит тут для того, чтобы все неравнодушные могли его поправить.
 Это говно является моей попыткой в создание плеера для записей стримов [Сайи](https://www.youtube.com/c/TheSayaScarlet), которые есть только у меня.
@@ -53,4 +53,4 @@ Used librarys https://github.com/ramlmn/Apache-Directory-Listing, https://redbea
 15. ??????
 16. Профит!
 
-Использованы библиотеки https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/ и https://github.com/js-cookie/js-cookie и вроде бы всё. Поправьте меня, если я забыл какие либы юзал.
+Использованы библиотеки https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/, https://www.npmjs.com/package/mysql2 и https://github.com/js-cookie/js-cookie и вроде бы всё. Поправьте меня, если я забыл какие либы юзал.
