@@ -573,8 +573,14 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
     font-size: 1.25rem;
     background: #d3d3d3d3;
     display: flex;
+    gap: .5em;
     align-items: flex-start;
     z-index: 999;
+}
+@media (max-width: 980px) {
+    .cookies-shit {
+        flex-wrap: wrap;
+    }
 }
 .cookies-shit::before {
     content: ' ';
@@ -590,6 +596,29 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
     padding: 0.5em;
     /*border-radius: 1.25em;*//*FIXME Why setting border-radius breaks all other user-agent's border- rules and :hover sate?*/
     cursor: pointer;
+}
+
+.dialog {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 100%;
+    max-width: 25em;
+    height: fit-content;
+    background: white;
+    isolation: isolate;
+}
+.dialog-bg {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #00000077;
+    z-index: -1;
 }
 
 .work-in-progress {

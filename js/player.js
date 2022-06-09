@@ -1,6 +1,15 @@
 Array.prototype.random = function () {
     return this[Math.floor((Math.random()*this.length))];
 }
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+}
+let sessionUUID = generateUUID()
+console.log('ass we can', generateUUID())
+
 
 //get elements
 const video = document.querySelector('video')

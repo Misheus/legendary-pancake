@@ -1,0 +1,22 @@
+{
+  "name": "sayastreams.mysheus.ru-api",
+  "version": "1.0.0",
+  "description": "API for sayastreams.mysheus.ru to be used in browser's js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Misheus/legendary-pancake.git"
+  },
+  "author": "Mysheus",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/Misheus/legendary-pancake/issues"
+  },
+  "homepage": "https://github.com/Misheus/legendary-pancake#readme",
+  "dependencies": {
+    "mysql2": "^2.3.3"
+  }
+}

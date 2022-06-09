@@ -11,14 +11,19 @@ I don't remember. I setuped dev enviroment long time ago using OpenServer. But h
 2. Pray.
 3. `git clone what the fuck is this repo link` or download zip and unzip in some specific folder I don't know which.
 4. Download some videos from https://sayastreams.mysheus.ru/
-5. Maybe you also want to download chat records and other garbage, located in `/names`, `/sartTimes` and `/chat` on https://sayastreams.mysheus.ru/ and put it in corresponding folders.
-6. Pray one more time.
-7. Try to enter to this in your browser I don't know how.
-8. Pray the third time.
-9. Fix all errors using google.
-10. Damn me.
-11. ??????
-12. Profit!
+5. `npm install` in `/api` to install dependencies
+6. Use Node.js npm to launch `/api/index.js`
+7. Configure your webserver to proxy requests from `/api` to Node (assuming node are on the same PC as webserver, use ip `127.0.0.1`) on port 42069
+8. Configure API for connecting to your MySQL database using `/api/options.example.json`, remove `.example` from its name
+9. Import non-existing yet sql file to your database //TODO create sql file
+10. Maybe you also want to download chat records and other garbage, located in `/names`, `/sartTimes` and `/chat` on https://sayastreams.mysheus.ru/ and put it in corresponding folders.
+11. Pray one more time.
+12. Try to enter to this in your browser I don't know how.
+13. Pray the third time.
+14. Fix all errors using google.
+15. Damn me.
+16. ??????
+17. Profit!
 
 Used librarys https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/ and https://github.com/js-cookie/js-cookie and seems to be all. Correct me if I forgot which libs I used.
 ## \[RU]
@@ -34,13 +39,18 @@ Used librarys https://github.com/ramlmn/Apache-Directory-Listing, https://redbea
 2. Помолиться.
 3. `git clone какая там ссылка на этот репозиторий` или скачать и распаковать зипку не знаю куда
 4. Скачать пару видео с https://sayastreams.mysheus.ru/
-5. Возможно вы так же хотите скачать записи чата и прочий мусор, находящийся в `/names`, `/sartTimes` и `/chat` на https://sayastreams.mysheus.ru/ и поместить его в соответствующие папки.
-6. Помолиться ещё раз.
-7. Попытаться зайти на неё не знаю как.
-8. Помолиться в третий раз.
-9. Пофиксить все ошибки при помощи гугла.
-10. Проклясть меня.
-11. ??????
-12. Профит!
+5. `npm install` в `/api` чтобы установить зависимости
+5. Использовать Node.js чтобы запустить `/api/index.js`
+6. Настроить ваш вебсервер на проксирование запросов с `/api` на Node (допустим, Node на том же ПК, что и вебсервер, использовать ip `127.0.0.1`) на порт 42069
+7. Настроить API для подключения к вашей базе MySQL, используя `/api/options.example.json`, удалив `.example` из его имени
+8. Импортировать ещё не существующий sql файл в вашу базу данных //TODO создать sql файл
+9. Возможно вы так же хотите скачать записи чата и прочий мусор, находящийся в `/names`, `/sartTimes` и `/chat` на https://sayastreams.mysheus.ru/ и поместить его в соответствующие папки.
+10. Помолиться ещё раз.
+11. Попытаться зайти на неё не знаю как.
+12. Помолиться в третий раз.
+13. Пофиксить все ошибки при помощи гугла.
+14. Проклясть меня.
+15. ??????
+16. Профит!
 
 Использованы библиотеки https://github.com/ramlmn/Apache-Directory-Listing, https://redbeanphp.com/ и https://github.com/js-cookie/js-cookie и вроде бы всё. Поправьте меня, если я забыл какие либы юзал.

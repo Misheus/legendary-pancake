@@ -5,6 +5,8 @@ require "lib/mysql.php";
 
 // tracking
 
+//TODO disable tracking for test enviroment
+
 if(!isset($_COOKIE['client-uuid']) || preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $_COOKIE['client-uuid']) !== 1)
 {
     $_COOKIE['client-uuid'] = guidv4();
@@ -376,8 +378,27 @@ else
         </div>
         <?php if(!isset($_COOKIE['cookies-accepted'])) {?>
         <div class="cookies-shit">
+            <script>
+                let detailsWindowOppened = null;
+                function onCookieWarningClose() {
+                    let time = (Date.now() - detailsWindowOppened)/1000
+                    console.log('Info window was opened for', time, 'seconds.')
+                    fetch('/api/register_event/terms_of_use_closed?time='+time)
+                }
+            </script>
             <?php echo resolveLoc('cookiewarning.text')?>
-            <button class="right-btn" onclick="Cookies.set('cookies-accepted', 'true', { expires: 365, path: '/' }); this.parentNode.remove()"><?php echo resolveLoc('cookiewarning.button')?></button>
+            <button style="width: max-content; flex-shrink: 0" class="right-btn" onclick="detailsWindowOppened = Date.now(); fetch('/api/register_event/terms_of_use_opened'); document.querySelector('#cookies-shit').style.display = 'block'"><?php echo resolveLoc('cookiewarning.moreinfo')?></button>
+            <button onclick="Cookies.set('cookies-accepted', 'true', { expires: 365, path: '/' }); this.parentNode.remove()"><?php echo resolveLoc('cookiewarning.button')?></button>
+            <div id="cookies-shit" class="dialog" style="display: none">
+                <div class="dialog-bg"></div>
+                <div style="background: white; padding: 1em"><!-- This is a crutch. .dialog-bg should be one z-index behinde .dialog. May be because they are children and parent this doesn't work. Someone, please find more appropriate solution. -->
+                    <div><?php echo resolveLoc('cookiewarning.detailedtext')?></div>
+                    <div style="display:flex; gap: .5em">
+                        <button class="right-btn" onclick="onCookieWarningClose(); document.querySelector('#cookies-shit').style.display = 'none'"><?php echo resolveLoc('cookiewarning.close')?></button>
+                        <button onclick="onCookieWarningClose(); Cookies.set('cookies-accepted', 'true', { expires: 365, path: '/' }); this.parentNode.parentNode.parentNode.parentNode.remove()"><?php echo resolveLoc('cookiewarning.button')?></button>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php }?>
     </main>

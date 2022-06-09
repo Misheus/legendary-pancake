@@ -27,6 +27,9 @@
 	"screenshot.select.type": "Screenshot extension",
 	"screenshot.select.jpg.quality": "Screenshot quality for JPG",
 	"gain": "Audio gain (dB)",
-	"cookiewarning.text": "This site uses cookies and collects usage statistics, including data such as ip address and user-agent. By continuing to use the site you agree to these terms.",
-	"cookiewarning.button": "Accept"
+	"cookiewarning.text": "This site uses cookies and collects usage statistics. By continuing to use the site you agree to these terms.",
+	"cookiewarning.button": "Accept",
+	"cookiewarning.moreinfo": "More info",
+	"cookiewarning.close": "Close",
+	"cookiewarning.detailedtext": "Cookies are used to store your settings, such as language, theme, etc as well as to identify you in the system. The statistics collected includes data such as IP address, your country (based on IP address) and your browser's user agent, is used to analyze the demand of the site and will never be shared with third parties. If you do not like the collection of this data, then some google or facebook collects much more sensitive information about you and much more."
 }
