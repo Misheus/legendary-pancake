@@ -11,7 +11,7 @@ I don't remember. I setuped dev enviroment long time ago using OpenServer. But h
 2. Pray.
 3. `git clone what the fuck is this repo link` or download zip and unzip in some specific folder I don't know which.
 4. Download some videos from https://sayastreams.mysheus.ru/
-5. `npm install` in `/api` to install dependencies
+5. `npm install` in `/api` to install dependencies. Actually you can skip steps 5 – 9, but you will have some 403 http errors.
 6. Use Node.js npm to launch `/api/index.js`
 7. Configure your webserver to proxy requests from `/api` to Node (assuming node are on the same PC as webserver, use ip `127.0.0.1`) on port 42069
 8. Configure API for connecting to your MySQL database using `/api/options.example.json`, remove `.example` from its name
@@ -39,7 +39,7 @@ Used librarys https://github.com/ramlmn/Apache-Directory-Listing, https://redbea
 2. Помолиться.
 3. `git clone какая там ссылка на этот репозиторий` или скачать и распаковать зипку не знаю куда
 4. Скачать пару видео с https://sayastreams.mysheus.ru/
-5. `npm install` в `/api` чтобы установить зависимости
+5. `npm install` в `/api` чтобы установить зависимости. На самом деле вы можете пропустить шаги 5 – 9, но вы будете получать 403 http ошибки.
 5. Использовать Node.js чтобы запустить `/api/index.js`
 6. Настроить ваш вебсервер на проксирование запросов с `/api` на Node (допустим, Node на том же ПК, что и вебсервер, использовать ip `127.0.0.1`) на порт 42069
 7. Настроить API для подключения к вашей базе MySQL, используя `/api/options.example.json`, удалив `.example` из его имени
