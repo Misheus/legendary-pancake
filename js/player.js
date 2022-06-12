@@ -212,7 +212,7 @@ video.addEventListener('play', ()=>{
             method: 'POST',
             body: fragments.join(';')
         })
-    }, 3000)//FIXME use POST in fetch and navigator.sendBeacon
+    }, 30000)//FIXME use POST in fetch and navigator.sendBeacon
     document.addEventListener('visibilitychange', function logData() {
         if (document.visibilityState === 'hidden') {//This not means ending session, but it will fire at ending session
             let fragments = [];                     //unload and beforeunload events are broken so this is the only variant

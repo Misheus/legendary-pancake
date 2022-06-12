@@ -171,7 +171,7 @@ require('http').createServer(async (req, res) => {
                         if(wathedFragments[GET.sessionUUID]) {//session exists
                             clearTimeout(wathedFragments[GET.sessionUUID].timer)
                             wathedFragments[GET.sessionUUID].lastData = GET.timeFragments
-                            wathedFragments[GET.sessionUUID].timer = setTimeout(wiewSessionEnd, 5000, GET.sessionUUID)
+                            wathedFragments[GET.sessionUUID].timer = setTimeout(wiewSessionEnd, 50000, GET.sessionUUID)
                             //fixme increase timeout
                         } else {//session does not exists
                             wathedFragments[GET.sessionUUID] = {
