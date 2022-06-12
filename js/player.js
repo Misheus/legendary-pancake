@@ -198,6 +198,8 @@ video.addEventListener('play', ()=>{
     //audience retention logger. There is no consistant way of sending data on the end of the session, so we will send data
     //every 30 seconds and in backend using sesiionUUID will use last data recived from session. This way if data transmission
     //at the end of session fails, we will still have some data, just 30 seconds outdated.
+
+    if(location.port === '2053') return//do not send statistics if we are on development port. (I use 2053 port for development server)
     setInterval(()=>{//video.played contain fragment just once ven if it was played many times. I need to write my implementation...
         let fragments = [];
         // for(let i = 0; i<video.played.length; i++) {
@@ -212,7 +214,7 @@ video.addEventListener('play', ()=>{
             method: 'POST',
             body: fragments.join(';')
         })
-    }, 30000)//FIXME use POST in fetch and navigator.sendBeacon
+    }, 30000)
     document.addEventListener('visibilitychange', function logData() {
         if (document.visibilityState === 'hidden') {//This not means ending session, but it will fire at ending session
             let fragments = [];                     //unload and beforeunload events are broken so this is the only variant
