@@ -5,7 +5,6 @@ require "lib/mysql.php";
 
 // tracking
 
-//TODO disable tracking for test enviroment
 
 if(!isset($_COOKIE['client-uuid']) || preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/', $_COOKIE['client-uuid']) !== 1)
 {
@@ -18,15 +17,15 @@ if(!isset($_COOKIE['client-uuid']) || preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-
         "samesite" => "Strict"
     ]);
 }
-
-$entry = R::dispense('accesslog');
-$entry['uuid'] = $_COOKIE['client-uuid'];
-$entry['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-$entry['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'];
-$entry['useragent'] = $_SERVER['HTTP_USER_AGENT'];
-$entry['path'] = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-R::store($entry);
-
+if(strcmp($_SERVER['SERVER_PORT'], '2053') != 0) {//I use port 2053 for testing. Disabling logging in this case.
+    $entry = R::dispense('accesslog');
+    $entry['uuid'] = $_COOKIE['client-uuid'];
+    $entry['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $entry['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'];
+    $entry['useragent'] = $_SERVER['HTTP_USER_AGENT'];
+    $entry['path'] = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    R::store($entry);
+}
 
 
 function guidv4($data = null) {
@@ -98,6 +97,7 @@ else
 <html lang="<?php echo resolveLoc('lang_code'); ?>">
 <head>
     <meta charset="UTF-8">
+    <script src="/js/HackTimer.min.js"></script>
     <script>
         //data from php. If you looking for it, it located in /startTimes and /chat in files named like video
         const starttime = new Date("<?php echo $starttime; ?>").getTime(),

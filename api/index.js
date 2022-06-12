@@ -1,5 +1,6 @@
 const options = require('./options.json')
 const mysql = require('mysql2');
+const fs = require('fs')
 let mysqldb = mysql.createPool(options.mysql);
 
 // *
@@ -45,6 +46,8 @@ mysqldb.insert = function (table, data) {
                 placeholders.push('?')
                 vals.push(data[keys[i]]?1:0)
                 break
+            default:
+                throw new Error('Unknown data type ' + typeof data[keys[i]])
         }
     }
     return this.queryPromise(`INSERT INTO \`${table}\`(${fields.join(', ')}) VALUES (${placeholders.join(', ')})`, vals)
@@ -75,7 +78,9 @@ mysqldb.update = function (table, data, where, vls) {
 // * /mysql-promise
 // *
 
-require('http').createServer((req, res) => {
+let wathedFragments = {}
+
+require('http').createServer(async (req, res) => {
     try {
         if (req.method !== "POST" && req.method !== "GET") {
             res.writeHead(501)
@@ -98,11 +103,6 @@ require('http').createServer((req, res) => {
             case 'register_event':
                 switch (url[1]) {
                     case 'terms_of_use_closed'://No one reads terms of use. This is just for prove it.
-                        if (req.method !== "GET") {
-                            res.writeHead(405)
-                            res.end('405 Method Not Allowed')
-                            break;
-                        }
                         if (!GET.time) {
                             res.writeHead(400)
                             res.end('400 Bad Request. Insufficient parameters. Expected: time.')
@@ -126,11 +126,6 @@ require('http').createServer((req, res) => {
                         res.end('200 OK')
                         break;
                     case 'terms_of_use_opened':
-                        if (req.method !== "GET") {
-                            res.writeHead(405)
-                            res.end('405 Method Not Allowed')
-                            break;
-                        }
                         console.log('someone opened cookies dialog box.')
                         mysqldb.insert('cookiesopeningrate', {
                             uuid: cookies["client-uuid"]||'00000000-0000-0000-0000-000000000000',
@@ -153,6 +148,45 @@ require('http').createServer((req, res) => {
                         //Да, диференцируем всё по UUID сесии, шлём каждые Х секунд, а по истечении Х секунд и не получению новых данных, записываем в БД последние полученные данные.
                         //Если мы не получим данные при уходе юзверя сос траницы, наши данные будут устаревшими на Х секунд, что не должно быть критично.
                         //Помним, что Navigator.sendBeacon() шлёт POST.
+                        let body = ''
+                        if(req.method === "POST")
+                        {
+                            await new Promise(resolve => {
+                                req.on('data', chunk => {
+                                    body += chunk.toString(); // convert Buffer to string
+                                });
+                                req.on('end', () =>{
+                                    resolve()
+                                    GET.timeFragments = body
+                                })
+                            })
+                        }
+                        if (!GET.sessionUUID || !GET.timeFragments) {
+                            res.writeHead(400)
+                            res.end('400 Bad Request. Insufficient parameters. Expected: sessionUUID and timeFragments.')
+                            break;
+                        }
+                        //fixme use POST for this
+                        //todo check if GET.sessionUUID is valid uuid and GET.timeFragments is valid
+                        if(wathedFragments[GET.sessionUUID]) {//session exists
+                            clearTimeout(wathedFragments[GET.sessionUUID].timer)
+                            wathedFragments[GET.sessionUUID].lastData = GET.timeFragments
+                            wathedFragments[GET.sessionUUID].timer = setTimeout(wiewSessionEnd, 5000, GET.sessionUUID)
+                            //fixme increase timeout
+                        } else {//session does not exists
+                            wathedFragments[GET.sessionUUID] = {
+                                lastData: GET.timeFragments,
+                                timer: setTimeout(wiewSessionEnd, 5000, GET.sessionUUID),//fixme increase timeout
+                                uuid: cookies["client-uuid"]||'00000000-0000-0000-0000-000000000000',
+                                ip: req.headers["cf-connecting-ip"],
+                                country: req.headers["cf-ipcountry"],
+                                sessionStart: Date.now()
+                            }
+                            console.log('Session', GET.sessionUUID, 'from user', wathedFragments[GET.sessionUUID].uuid, 'started.')
+                        }
+                        console.log('Recived', GET.timeFragments, 'from session', GET.sessionUUID)
+                        res.writeHead(200)
+                        res.end('200 OK')
                         break;
                     default:
                         res.writeHead(400)
@@ -172,3 +206,29 @@ require('http').createServer((req, res) => {
         res.end('500 Internal Server Error')
     }
 }).listen(42069)
+
+
+function wiewSessionEnd(sessionUUID) {
+    console.log('No data from session', sessionUUID, 'for too long. Assuming session ended.')
+    console.log('Session', sessionUUID, 'from user', wathedFragments[sessionUUID].uuid, 'watched', wathedFragments[sessionUUID].lastData)
+
+    if(wathedFragments[sessionUUID].lastData.length>999)
+    {
+        console.error('Session', sessionUUID, 'from user', wathedFragments[sessionUUID].uuid, 'has too much data', wathedFragments[sessionUUID].lastData.length)
+        fs.writeFileSync(`${__dirname}/wathedLarge/${sessionUUID}.txt`, wathedFragments[sessionUUID].lastData)
+        wathedFragments[sessionUUID].lastData = 'Data too large. See file in that ass.'
+        //FIXME What to do with large chunks of data with thousents of symbols?
+    }
+
+    mysqldb.insert('watchtime',{
+        sessionstart: new Date(wathedFragments[sessionUUID].sessionStart).toISOString(),
+        sessionend: new Date().toISOString(),
+        sessionuuid: sessionUUID,
+        uuid: wathedFragments[sessionUUID].uuid,
+        ip: wathedFragments[sessionUUID].ip,
+        country: wathedFragments[sessionUUID].country,
+        fragments:wathedFragments[sessionUUID].lastData
+    })
+
+    delete wathedFragments[sessionUUID]
+}

@@ -8,7 +8,6 @@ function generateUUID() {
     });
 }
 let sessionUUID = generateUUID()
-console.log('ass we can', generateUUID())
 
 
 //get elements
@@ -118,9 +117,9 @@ const GET = Object.fromEntries(location.search.substr(1).split("&").map(v => v.s
 
 if(GET.t){
     if(GET.t.match(/^\d*$/))
-        video.currentTime = parseInt(GET.t)
+        videoSeek( parseInt(GET.t))
     else
-        video.currentTime = timeToSeconds(GET.t)
+        videoSeek(timeToSeconds(GET.t))
 }
 function timeToSeconds(time) {
     let ass = (/^((?<h>\d*):)?(?<m>\d*):(?<s>\d*)$/g.exec(time) || /^((?<h>\d*)h)?((?<m>\d*)m)?((?<s>\d*)s)?$/g.exec(time) || []).groups || {}
@@ -134,7 +133,7 @@ document.addEventListener('click', e=>{
     if(e.target && e.target.dataset && e.target.dataset.timecodelink && e.target.dataset.video === GET.v)
     {
         e.preventDefault()
-        video.currentTime = timeToSeconds(e.target.dataset.timecodelink)
+        videoSeek(timeToSeconds(e.target.dataset.timecodelink))
         history.replaceState(null, "", `/watch?v=${GET.v}&t=${e.target.dataset.timecodelink}`)
     }
 })
@@ -143,6 +142,48 @@ description_text.innerHTML = parseTimecodedText(description)
 
 let inactivity = 0;
 let fullscreenmode = 0;//0 - nofs; 1 - semi-fs; 2 - fs
+
+//fragments wathed. Yes, I cant use video.played.
+let fragmentsWathed = [
+    {start: 0}
+]
+let isSeeking = false
+let lastTime = 0
+video.addEventListener('play', ()=>{
+    console.log('play', video.currentTime)
+})
+video.addEventListener('pause', ()=>{console.log('pause', video.currentTime)})//do I need this?
+video.addEventListener('seeking', ()=>{//second
+    isSeeking = true
+    //console.log('seeking', video.currentTime)
+})
+video.addEventListener('seeked', ()=>{//forth
+    isSeeking = false
+    console.log('seeked', lastTime, '->', video.currentTime)
+})
+video.addEventListener('timeupdate', ()=>{//third
+    //console.log('timeupdate', video.currentTime, isSeeking)
+    //if(!isSeeking) lastTime = video.currentTime
+    if(Math.abs(video.currentTime - lastTime) > 1){//seeked
+        if(fragmentsWathed[fragmentsWathed.length-1].start === Math.round(lastTime))
+            fragmentsWathed[fragmentsWathed.length-1].start = Math.round(video.currentTime)
+        else {
+            fragmentsWathed[fragmentsWathed.length-1].end = Math.round(lastTime)
+            fragmentsWathed[fragmentsWathed.length] = {start:Math.round(video.currentTime)}
+        }
+    } else {
+        fragmentsWathed[fragmentsWathed.length-1].end = Math.round(video.currentTime)
+    }
+    lastTime = video.currentTime
+    //console.log(fragmentsWathed)
+})
+function videoSeek(newtime) {//first
+    let oldtime = video.currentTime//Are there any other methods to seek the video than using my bar, keys or double tap?
+    video.currentTime = newtime
+    //console.log('videoSeek', oldtime, newtime)
+}
+
+
 //audio gain
 video.addEventListener('play', ()=>{
     let audioContext = new AudioContext()//this shit can not be just writen because google is stupid and not allowing creation audiocontext before user clicks page ( https://goo.gl/7K7WLu ) But this is not autoplay. And how youtube has autoplay? Fuck you, google!
@@ -153,7 +194,44 @@ video.addEventListener('play', ()=>{
     gaincontrolinput.addEventListener('change', ()=>{
         gainNode.gain.value = 10**(parseInt(gaincontrolinput.value)/20)
     })
+
+    //audience retention logger. There is no consistant way of sending data on the end of the session, so we will send data
+    //every 30 seconds and in backend using sesiionUUID will use last data recived from session. This way if data transmission
+    //at the end of session fails, we will still have some data, just 30 seconds outdated.
+    setInterval(()=>{//video.played contain fragment just once ven if it was played many times. I need to write my implementation...
+        let fragments = [];
+        // for(let i = 0; i<video.played.length; i++) {
+        //     fragments.push(Math.round(video.played.start(i))+'-'+Math.round(video.played.end(i)))
+        // }
+        for (let i = 0; i<fragmentsWathed.length; i++)
+        {
+            if(fragmentsWathed[i].end) fragments.push(fragmentsWathed[i].start+'-'+fragmentsWathed[i].end)
+        }
+        console.log(fragments.join(';'))
+        fetch(`/api/register_event/fragments_wathed?sessionUUID=${sessionUUID}`, {
+            method: 'POST',
+            body: fragments.join(';')
+        })
+    }, 3000)//FIXME use POST in fetch and navigator.sendBeacon
+    document.addEventListener('visibilitychange', function logData() {
+        if (document.visibilityState === 'hidden') {//This not means ending session, but it will fire at ending session
+            let fragments = [];                     //unload and beforeunload events are broken so this is the only variant
+            // for(let i = 0; i<video.played.length; i++) {
+            //     fragments.push(Math.round(video.played.start(i))+'-'+Math.round(video.played.end(i)))
+            // }
+            for (let i = 0; i<fragmentsWathed.length; i++)
+            {
+                if(fragmentsWathed[i].end) fragments.push(fragmentsWathed[i].start+'-'+fragmentsWathed[i].end)
+            }
+            navigator.sendBeacon(`/api/register_event/fragments_wathed?sessionUUID=${sessionUUID}`, fragments.join(';'));
+            //Somewhere I readed that some adblockers may also block navigator.sendBeacon(), so we still need to send data on timer.
+        }
+    });
 }, {once: true})
+
+
+
+
 
 fcl.addEventListener('mousemove', ()=> {
     if(touchscreen) return
@@ -226,8 +304,8 @@ videocontrolsbackground.addEventListener('click', e => {
 function onvideodoubleclick(e) {
     if(touchscreen) {
         if(e.offsetX/videocontrolsbackground.clientWidth>0.5)
-            video.currentTime+=5
-        else video.currentTime-=5
+            videoSeek(video.currentTime+5)
+        else videoSeek(video.currentTime-5)
     } else {
         if(fullscreenmode === 2) {//exit fs
             document.exitFullscreen()
@@ -409,7 +487,7 @@ video.addEventListener('loadedmetadata', ()=>{
     })
     function seek(e) {
         //console.log(e)
-        video.currentTime = ((e.x!==undefined?e.x:e.changedTouches[0].clientX)-(seekbarbtn.getBoundingClientRect().left + window.scrollX))/seekbarbtn.clientWidth*video.duration
+        videoSeek(((e.x!==undefined?e.x:e.changedTouches[0].clientX)-(seekbarbtn.getBoundingClientRect().left + window.scrollX))/seekbarbtn.clientWidth*video.duration)
     }
 })
 
@@ -429,14 +507,14 @@ document.addEventListener('keydown', e=>{
             break;
         case 'ArrowLeft':
             e.preventDefault()
-            video.currentTime -= 5
+            videoSeek(video.currentTime - 5)
             break;
         case 'ArrowRight':
             e.preventDefault()
-            video.currentTime += 5
+            videoSeek(video.currentTime + 5)
             break;
         case 'KeyJ':
-            video.currentTime -= 10
+            videoSeek(video.currentTime - 10)
             break;
         case 'Space':
         case 'KeyK':
@@ -445,7 +523,7 @@ document.addEventListener('keydown', e=>{
             else video.pause()
             break;
         case 'KeyL':
-            video.currentTime += 10
+            videoSeek(video.currentTime + 10)
             break;
         case 'KeyM':
             localStorage.setItem('mute', video.muted = !video.muted)
@@ -751,7 +829,7 @@ if(chat){
                 '<img alt="" src="'+msg.authorDetails.profileImageUrl.replace('yt3.ggpht.com', 'yt4.ggpht.com')+'">' +
                 '</a>' +
                 '<div class="message-text">' +
-                '<span class="chat-time" onclick="video.currentTime='+(Date.parse(msg.snippet.publishedAt)-starttime)/1000+'">'+convertTime(msg.snippet.publishedAt)+' </span>' +
+                '<span class="chat-time" onclick="videoSeek('+(Date.parse(msg.snippet.publishedAt)-starttime)/1000+')">'+convertTime(msg.snippet.publishedAt)+' </span>' +
                 '<span class="chat-name '+
                 (msg.authorDetails.isChatModerator?'moder ':'') +
                 (msg.authorDetails.isChatOwner?'owner ':'') +
@@ -787,7 +865,7 @@ if(chat){
                 '<img alt="" src="'+msg.authorDetails.profileImageUrl+'">' +//if I will want avatrs in chat for twitch
                 '</a>' +*/
                 '<div class="message-text">' +
-                    '<span class="chat-time" onclick="video.currentTime='+(parseInt(msg.tags["tmi-sent-ts"])-starttime)/1000+'">'+convertTime(new Date(parseInt(msg.tags["tmi-sent-ts"])).toISOString())+' </span>' +
+                    '<span class="chat-time" onclick="videoSeek('+(parseInt(msg.tags["tmi-sent-ts"])-starttime)/1000+')">'+convertTime(new Date(parseInt(msg.tags["tmi-sent-ts"])).toISOString())+' </span>' +
                     '<span class="chat-name" style="color: '+(msg.tags.color?msg.tags.color:twitchUsersColors[msg.tags.username])+'">'+
                         msgbadgestext +
                         '<a href="https://www.twitch.tv/'+msg.tags.username+'" target="_blank" class="twitch-name">' +
