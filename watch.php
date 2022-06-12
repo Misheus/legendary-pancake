@@ -321,8 +321,8 @@ else
                             </div>
                             <div class="desc-links">
                                 <a href="https://www.youtube.com/c/TheSayaScarlet" target="_blank"><?php echo resolveLoc('watchonyoutube'); ?></a> ●
-                                <a href="/" target="_blank"><?php echo resolveLoc('allrecords'); ?></a> ●
-                                <a href="https://mysheus.ru/MeeThya/Saya_Streams_Tables.html" target="_blank"><?php echo resolveLoc('songstable'); ?></a>
+                                <a href="https://mysheus.ru/MeeThya/Saya_Streams_Tables.html" target="_blank"><?php echo resolveLoc('allrecords'); ?></a> ●
+                                <a href="https://mysheus.ru/MeeThya/Saya_Streams_Tables.html?mode=table" target="_blank"><?php echo resolveLoc('songstable'); ?></a>
                             </div>
                         </div>
                     </div>
