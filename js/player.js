@@ -210,7 +210,7 @@ video.addEventListener('play', ()=>{
             if(fragmentsWathed[i].end) fragments.push(fragmentsWathed[i].start+'-'+fragmentsWathed[i].end)
         }
         console.log(fragments.join(';'))
-        fetch(`/api/register_event/fragments_wathed?sessionUUID=${sessionUUID}`, {
+        fetch(`/api/register_event/fragments_wathed?sessionUUID=${sessionUUID}&v=${GET.v}`, {
             method: 'POST',
             body: fragments.join(';')
         })
@@ -225,7 +225,7 @@ video.addEventListener('play', ()=>{
             {
                 if(fragmentsWathed[i].end) fragments.push(fragmentsWathed[i].start+'-'+fragmentsWathed[i].end)
             }
-            navigator.sendBeacon(`/api/register_event/fragments_wathed?sessionUUID=${sessionUUID}`, fragments.join(';'));
+            navigator.sendBeacon(`/api/register_event/fragments_wathed?sessionUUID=${sessionUUID}&v=${GET.v}`, fragments.join(';'));
             //Somewhere I readed that some adblockers may also block navigator.sendBeacon(), so we still need to send data on timer.
         }
     });

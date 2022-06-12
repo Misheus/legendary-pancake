@@ -161,9 +161,9 @@ require('http').createServer(async (req, res) => {
                                 })
                             })
                         }
-                        if (!GET.sessionUUID || !GET.timeFragments) {
+                        if (!GET.sessionUUID || !GET.timeFragments || !GET.v) {
                             res.writeHead(400)
-                            res.end('400 Bad Request. Insufficient parameters. Expected: sessionUUID and timeFragments.')
+                            res.end('400 Bad Request. Insufficient parameters. Expected: sessionUUID, timeFragments (or POST body) and v.')
                             break;
                         }
                         //fixme use POST for this
@@ -180,11 +180,12 @@ require('http').createServer(async (req, res) => {
                                 uuid: cookies["client-uuid"]||'00000000-0000-0000-0000-000000000000',
                                 ip: req.headers["cf-connecting-ip"],
                                 country: req.headers["cf-ipcountry"],
-                                sessionStart: Date.now()
+                                sessionStart: Date.now(),
+                                video: GET.v
                             }
                             console.log('Session', GET.sessionUUID, 'from user', wathedFragments[GET.sessionUUID].uuid, 'started.')
                         }
-                        console.log('Recived', GET.timeFragments, 'from session', GET.sessionUUID)
+                        console.log('Recived', GET.timeFragments, 'for', GET.v, 'from session', GET.sessionUUID)
                         res.writeHead(200)
                         res.end('200 OK')
                         break;
@@ -210,7 +211,7 @@ require('http').createServer(async (req, res) => {
 
 function wiewSessionEnd(sessionUUID) {
     console.log('No data from session', sessionUUID, 'for too long. Assuming session ended.')
-    console.log('Session', sessionUUID, 'from user', wathedFragments[sessionUUID].uuid, 'watched', wathedFragments[sessionUUID].lastData)
+    console.log('Session', sessionUUID, 'from user', wathedFragments[sessionUUID].uuid, 'for', wathedFragments[sessionUUID].video, 'watched', wathedFragments[sessionUUID].lastData)
 
     if(wathedFragments[sessionUUID].lastData.length>999)
     {
@@ -227,7 +228,8 @@ function wiewSessionEnd(sessionUUID) {
         uuid: wathedFragments[sessionUUID].uuid,
         ip: wathedFragments[sessionUUID].ip,
         country: wathedFragments[sessionUUID].country,
-        fragments:wathedFragments[sessionUUID].lastData
+        fragments:wathedFragments[sessionUUID].lastData,
+        video:wathedFragments[sessionUUID].video
     })
 
     delete wathedFragments[sessionUUID]
