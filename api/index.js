@@ -176,7 +176,7 @@ require('http').createServer(async (req, res) => {
                         } else {//session does not exists
                             wathedFragments[GET.sessionUUID] = {
                                 lastData: GET.timeFragments,
-                                timer: setTimeout(wiewSessionEnd, 5000, GET.sessionUUID),//fixme increase timeout
+                                timer: setTimeout(wiewSessionEnd, 50000, GET.sessionUUID),//fixme increase timeout
                                 uuid: cookies["client-uuid"]||'00000000-0000-0000-0000-000000000000',
                                 ip: req.headers["cf-connecting-ip"],
                                 country: req.headers["cf-ipcountry"],
