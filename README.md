@@ -15,7 +15,7 @@ I don't remember. I setuped dev enviroment long time ago using OpenServer. But h
 6. Use Node.js npm to launch `/api/index.js`
 7. Configure your webserver to proxy requests from `/api` to Node (assuming node are on the same PC as webserver, use ip `127.0.0.1`) on port 42069
 8. Configure API for connecting to your MySQL database using `/api/options.example.json`, remove `.example` from its name
-9. Import non-existing yet sql file to your database //TODO create sql file
+9. Import `sayastreams.sql` file to your database
 10. Maybe you also want to download chat records and other garbage, located in `/names`, `/sartTimes` and `/chat` on https://sayastreams.mysheus.ru/ and put it in corresponding folders.
 11. Pray one more time.
 12. Try to enter to this in your browser I don't know how.
@@ -50,7 +50,7 @@ Correct me if I forgot which libs I used.
 5. Использовать Node.js чтобы запустить `/api/index.js`
 6. Настроить ваш вебсервер на проксирование запросов с `/api` на Node (допустим, Node на том же ПК, что и вебсервер, использовать ip `127.0.0.1`) на порт 42069
 7. Настроить API для подключения к вашей базе MySQL, используя `/api/options.example.json`, удалив `.example` из его имени
-8. Импортировать ещё не существующий sql файл в вашу базу данных //TODO создать sql файл
+8. Импортировать `sayastreams.sql` в вашу базу данных
 9. Возможно вы так же хотите скачать записи чата и прочий мусор, находящийся в `/names`, `/sartTimes` и `/chat` на https://sayastreams.mysheus.ru/ и поместить его в соответствующие папки.
 10. Помолиться ещё раз.
 11. Попытаться зайти на неё не знаю как.
