@@ -48,7 +48,7 @@ const screenshotqsel = document.querySelector('#screenshotqsel')
 const videocontrolsbackground = document.querySelector('#videocontrolsbackground')
 const gaincontrolinput = document.querySelector('#gaincontrolinput')
 
-let touchscreen = true;//switch betwwen touchscreen mode and mouse mode if user does so
+let touchscreen = window.matchMedia("(hover: none)").matches; //switch betwwen touchscreen mode and mouse mode if user does so. Default is according to the media rule.
 window.addEventListener('mousemove', ()=> {
     if(ignoremousemove) return ignoremousemove = false;
     document.body.dataset.touchscreen = touchscreen = false
@@ -56,6 +56,10 @@ window.addEventListener('mousemove', ()=> {
 let ignoremousemove = false;
 window.addEventListener('touchend', ()=>{
     ignoremousemove = true;
+})
+window.addEventListener('touchmove', ()=>{
+    ignoremousemove = true;
+    document.body.dataset.touchscreen = touchscreen = true
 })
 window.addEventListener('touchstart', ()=> {
     document.body.dataset.touchscreen = touchscreen = true
