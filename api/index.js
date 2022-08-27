@@ -213,15 +213,7 @@ function wiewSessionEnd(sessionUUID) {
     console.log('No data from session', sessionUUID, 'for too long. Assuming session ended.')
     console.log('Session', sessionUUID, 'from user', wathedFragments[sessionUUID].uuid, 'for', wathedFragments[sessionUUID].video, 'watched', wathedFragments[sessionUUID].lastData)
 
-    if(wathedFragments[sessionUUID].lastData.length>999)
-    {
-        console.error('Session', sessionUUID, 'from user', wathedFragments[sessionUUID].uuid, 'has too much data', wathedFragments[sessionUUID].lastData.length)
-        fs.writeFileSync(`${__dirname}/wathedLarge/${sessionUUID}.txt`, wathedFragments[sessionUUID].lastData)
-        wathedFragments[sessionUUID].lastData = 'Data too large. See file in that ass.'
-        //FIXME What to do with large chunks of data with thousents of symbols?
-    }
-
-    mysqldb.insert('watchtime',{
+    let data = {
         sessionstart: new Date(wathedFragments[sessionUUID].sessionStart).toISOString(),
         sessionend: new Date().toISOString(),
         sessionuuid: sessionUUID,
@@ -230,6 +222,19 @@ function wiewSessionEnd(sessionUUID) {
         country: wathedFragments[sessionUUID].country,
         fragments:wathedFragments[sessionUUID].lastData,
         video:wathedFragments[sessionUUID].video
+    }
+
+    if(wathedFragments[sessionUUID].lastData.length>999)
+    {
+        console.error('Session', sessionUUID, 'from user', wathedFragments[sessionUUID].uuid, 'has too much data', wathedFragments[sessionUUID].lastData.length)
+        fs.writeFileSync(`${__dirname}/wathedLarge/${sessionUUID}.json`, JSON.stringify(data, null, 4))
+        wathedFragments[sessionUUID].lastData = 'Data too large. See file in that ass.'
+        //FIXME What to do with large chunks of data with thousents of symbols?
+    }
+
+    mysqldb.insert('watchtime', data).catch(e=>{
+        console.log('MySQL error',e)
+        fs.writeFileSync(`${__dirname}/wathedErrored/${sessionUUID}.json`, JSON.stringify(data, null, 4))
     })
 
     delete wathedFragments[sessionUUID]

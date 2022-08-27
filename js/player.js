@@ -387,43 +387,7 @@ screenshotextsel.addEventListener('change', ()=>{
     localStorage.setItem('screenshotExt', screenshotextsel.value)
 })
 
-const canvas = document.createElement('canvas')
-canvas.width = video.videoWidth
-canvas.height = video.videoHeight
-canvas.promiseBlob = function(mimeType, qualityArgument) {
-    return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
-};
-let EbanyiScreenhotTrys = 0
-async function doEbanyiScreenshot() {
-    //for some unknown strange reasons context.drawImage() doesnt always work. Sometimes canvas remains transparent.
-    let context = canvas.getContext('2d')
-    //while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
-    //try first time
-    context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
-    if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try second time
-    if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try third time
-    if(!context.getImageData(0, 0, 1, 1).data[3]) { //check top left pixel opacity
-        if(EbanyiScreenhotTrys > 4) {
-            //giving up
-            EbanyiScreenhotTrys = 0;
-            alert(resolveLoc('screenshot.error'))
-            return
-        }
-        setTimeout(doEbanyiScreenshot, 100)//wait 100ms and try again from start
-        EbanyiScreenhotTrys++
-        return
-    }
-    EbanyiScreenhotTrys = 0;
-    let url = window.URL.createObjectURL(await canvas.promiseBlob(
-        localStorage.getItem('screenshotExt')==='png'?'image/png':'image/jpeg',
-        parseInt(localStorage.getItem('screenshotJpgQuality'))/100))
-    let a = document.createElement('a')
-    a.href = url
-    a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
-    a.click()
-}
+
 let isvoluming = false
 primaryvolumechangebtn.addEventListener('mousedown', e=> {
     isvoluming = true
@@ -458,7 +422,6 @@ function changevolume(e) {
     localStorage.setItem('volume', vol)
 }
 
-screenshotbtn.addEventListener('click', doEbanyiScreenshot)
 video.addEventListener('loadedmetadata', ()=>{
     timeallel.innerText = secondsToTime(video.duration)
 
@@ -491,6 +454,47 @@ video.addEventListener('loadedmetadata', ()=>{
         //console.log(e)
         videoSeek(((e.x!==undefined?e.x:e.changedTouches[0].clientX)-(seekbarbtn.getBoundingClientRect().left + window.scrollX))/seekbarbtn.clientWidth*video.duration)
     }
+
+
+
+    const canvas = document.createElement('canvas')
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    canvas.promiseBlob = function(mimeType, qualityArgument) {
+        return new Promise(resolve => this.toBlob(resolve, mimeType, qualityArgument))
+    };
+    let EbanyiScreenhotTrys = 0
+    async function doEbanyiScreenshot() {
+        //for some unknown strange reasons context.drawImage() doesnt always work. Sometimes canvas remains transparent.
+        let context = canvas.getContext('2d')
+        //while(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+        //try first time
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+        if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try second time
+        if(!context.getImageData(0, 0, 1, 1).data[3])//check top left pixel opacity
+            context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)//try third time
+        if(!context.getImageData(0, 0, 1, 1).data[3]) { //check top left pixel opacity
+            if(EbanyiScreenhotTrys > 4) {
+                //giving up
+                EbanyiScreenhotTrys = 0;
+                alert(resolveLoc('screenshot.error'))
+                return
+            }
+            setTimeout(doEbanyiScreenshot, 100)//wait 100ms and try again from start
+            EbanyiScreenhotTrys++
+            return
+        }
+        EbanyiScreenhotTrys = 0;
+        let url = window.URL.createObjectURL(await canvas.promiseBlob(
+            localStorage.getItem('screenshotExt')==='png'?'image/png':'image/jpeg',
+            parseInt(localStorage.getItem('screenshotJpgQuality'))/100))
+        let a = document.createElement('a')
+        a.href = url
+        a.download = `${GET.v}-${secondsToTime(video.currentTime)}.${localStorage.getItem('screenshotExt')}`
+        a.click()
+    }
+    screenshotbtn.addEventListener('click', doEbanyiScreenshot)
 })
 
 document.addEventListener('keydown', e=>{
