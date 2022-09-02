@@ -553,12 +553,24 @@ if(chat){
 (async ()=>{
 
     let badges
-
-    try {
-        if(chat[0].tags) { //twitch chat
-            badges = (await (await fetch('https://badges.twitch.tv/v1/badges/global/display')).json()).badge_sets
+    if(chat[0].tags) { //twitch chat
+        async function getBadgesInfo() {
+            try {
+                badges = (await (await fetch('https://badges.twitch.tv/v1/badges/global/display')).json()).badge_sets
+            } catch (e) {
+                console.log(e)
+                console.error('Fuck my ass, twitch doesn\'t give us badges info...')
+            }
+            if(!badges) {
+                console.error('no badges loaded.')
+                //should we retry???
+                //should we use default one?
+            }
         }
-    } catch (e) {}
+        await getBadgesInfo()
+    }
+
+
     if(!badges) badges = {}
 
     let twitchChatColors = [
@@ -855,7 +867,7 @@ if(chat){
             let userbadges = Object.keys(msg.tags.badges || {})
 
             for(let i = 0; i < userbadges.length; i++) {
-                let badge = badges[userbadges[i]].versions[msg.tags.badges[userbadges[i]]]
+                let badge = badges[userbadges[i]]?.versions?.[msg.tags.badges[userbadges[i]]] || {title: userbadges[i]}//default for alt attr on img if badge was not found and/or twitch don't give us badges info at all
                 msgbadgestext+=
                     '<a '+(badge.click_action==='visit_url'?'href="'+badge.click_url+'" target="_blank"':'')+ ' class="twitch-badge">' +
                     '<img src="'+badge.image_url_1x+'" alt="'+badge.title+' badge" title="'+badge.title+'">' +
