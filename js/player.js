@@ -57,6 +57,10 @@ let ignoremousemove = false;
 window.addEventListener('touchend', ()=>{
     ignoremousemove = true;
 })
+window.addEventListener('touchmove', ()=>{
+    ignoremousemove = true;
+    document.body.dataset.touchscreen = touchscreen = true
+})
 window.addEventListener('touchstart', ()=> {
     document.body.dataset.touchscreen = touchscreen = true
 }, {passive: false})
