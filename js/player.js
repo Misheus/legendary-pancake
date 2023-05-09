@@ -12,7 +12,7 @@ let sessionUUID = generateUUID()
 
 //get elements
 const video = document.querySelector('video')
-const chatdiv = document.querySelector('.flex-container-right')
+const chatdivButAnotherOneJustToConfuseEveryoneAndMyself = document.querySelector('.flex-container-right')
 const fcl = document.querySelector('.flex-container-left')
 const description_text = document.querySelector('#description')
 const timeplayedel = document.querySelector('#time-played')
@@ -93,7 +93,8 @@ window.addEventListener('touchstart', ()=> {
 //set video aspect ratio because CSS property not always work
 video.style.height = fcl.scrollWidth/16*9+'px'//is it always working? I don't thinl so... Someone, plese fix this. fixme sometimes this fires too late. maybe defer is not good at all times
 function ass() {//set chat height equal to video's
-    chatdiv.style.height = video.scrollHeight + 'px'
+    chatdivButAnotherOneJustToConfuseEveryoneAndMyself.style.height = video.scrollHeight + 'px'
+    if(scrollChat) setTimeout(scrollChat, 500) //автоскролл с учётом длительности изменения размера окошка чата
 }
 window.addEventListener('resize', ass)
 if(video.videoHeight) {
@@ -556,6 +557,14 @@ document.addEventListener('keydown', e=>{
 })
 
 
+const chatdiv = document.querySelector('.chat-messages')
+let lastmsg //элемент последнего на проигрываемый момент сообщения
+let scrolledup = false //переменная для определения, прокрутили ли мы чат вверх
+function scrollChat(){
+    if(!scrolledup && lastmsg && chatcollapse.dataset.collapsed === "false") chatdiv.parentElement.scroll(0, lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight)
+}
+
+
 //chat
 if(chat){
 (async ()=>{
@@ -690,7 +699,6 @@ if(chat){
             .replace(/'/g, "&#039;");
     }
 
-    const chatdiv = document.querySelector('.chat-messages')
     let yt = !!chat[0].snippet,
         index = 0,
         lasttime = 0,
@@ -698,14 +706,9 @@ if(chat){
         db = false,
         initialSkip = false;
 
-    let lastmsg //элемент последнего на проигрываемый момент сообщения
-    let scrolledup = false //переменная для определения, прокрутили ли мы чат вверх
     chatdiv.parentElement.addEventListener('scroll', ()=>{
         if(lastmsg) scrolledup = chatdiv.parentElement.scrollTop < lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight-5
     })
-    function scrollChat(){
-        if(!scrolledup && lastmsg) chatdiv.parentElement.scroll(0, lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight)
-    }
     window.addEventListener('resize', scrollChat)
 
     video.ontimeupdate = () => {
@@ -924,6 +927,7 @@ chatcollapsebutton.addEventListener('click', ()=>{
     if(chatcollapse.dataset.collapsed === "true") {
         chatcollapse.dataset.collapsed = "false"
         chatcollapsebutton.innerHTML = resolveLoc('collapse')
+        if(scrollChat) setTimeout(scrollChat, 500) //автоскролл с учётом длительности открытия окошка чата
     } else {
         chatcollapse.dataset.collapsed = "true"
         chatcollapsebutton.innerHTML = resolveLoc('expand')
