@@ -94,7 +94,6 @@ window.addEventListener('touchstart', ()=> {
 video.style.height = fcl.scrollWidth/16*9+'px'//is it always working? I don't thinl so... Someone, plese fix this. fixme sometimes this fires too late. maybe defer is not good at all times
 function ass() {//set chat height equal to video's
     chatdiv.style.height = video.scrollHeight + 'px'
-    if(scrollChat) setTimeout(scrollChat, 500) //автоскролл с учётом длительности изменения размера окошка чата
 }
 window.addEventListener('resize', ass)
 video.addEventListener('loadedmetadata', ()=>{
@@ -701,8 +700,9 @@ if(chat){
         if(lastmsg) scrolledup = chatdiv.parentElement.scrollTop < lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight-5
     })
     function scrollChat(){
-        if(!scrolledup && lastmsg && chatcollapse.dataset.collapsed === "false") chatdiv.parentElement.scroll(0, lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight)
+        if(!scrolledup && lastmsg) chatdiv.parentElement.scroll(0, lastmsg.offsetTop-chatdiv.parentElement.offsetTop-chatdiv.parentElement.offsetHeight+lastmsg.offsetHeight)
     }
+    window.addEventListener('resize', scrollChat)
 
     video.ontimeupdate = () => {
         let now = starttime+video.currentTime*1000
@@ -920,7 +920,6 @@ chatcollapsebutton.addEventListener('click', ()=>{
     if(chatcollapse.dataset.collapsed === "true") {
         chatcollapse.dataset.collapsed = "false"
         chatcollapsebutton.innerHTML = resolveLoc('collapse')
-        if(scrollChat) setTimeout(scrollChat, 500) //автоскролл с учётом длительности открытия окошка чата
     } else {
         chatcollapse.dataset.collapsed = "true"
         chatcollapsebutton.innerHTML = resolveLoc('expand')
