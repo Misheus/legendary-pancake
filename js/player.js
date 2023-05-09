@@ -96,6 +96,10 @@ function ass() {//set chat height equal to video's
     chatdiv.style.height = video.scrollHeight + 'px'
 }
 window.addEventListener('resize', ass)
+if(video.videoHeight) {
+    video.style.height = ''
+    ass()
+} else
 video.addEventListener('loadedmetadata', ()=>{
     //reset video aspect ratio because now it has video's metadata
     video.style.height = ''
