@@ -431,7 +431,7 @@ function changevolume(e) {
     localStorage.setItem('volume', vol)
 }
 
-video.addEventListener('loadedmetadata', ()=>{
+function loadedMetadata() {
     timeallel.innerText = secondsToTime(video.duration)
 
     let isseaking = false
@@ -504,7 +504,12 @@ video.addEventListener('loadedmetadata', ()=>{
         a.click()
     }
     screenshotbtn.addEventListener('click', doEbanyiScreenshot)
-})
+}
+
+if(video.duration)//check if metadata is already loaded
+    loadedMetadata()
+else
+    video.addEventListener('loadedmetadata', loadedMetadata)
 
 document.addEventListener('keydown', e=>{
     if(document.activeElement.tagName === 'INPUT') return
