@@ -81,13 +81,9 @@ window.addEventListener('touchstart', ()=> {
  * I don't know how to write code, if you still haven't noticed.
  * Please someone answer all (or some) of this questions. You can contact me via:
  * telepathy,
- * vkontakte https://vk.com/misheus
- * Discord https://discord.com/invite/npe57eJ
- * Twitter https://twitter.com/Mysheus
- * instagram https://www.instagram.com/kawaiiaustralopithecus/
- * Telegram https://t.me/mysheus
+ * https://c.mysheus.ru/
  * Github https://github.com/Misheus (github has DMs? I don't know. But I know it has comments on commits!)
- * comments on this site (if in your future I wrote ones)
+ * comments on this site (if in your future they're a thing)
  */
 
 //set video aspect ratio because CSS property not always work
@@ -858,26 +854,24 @@ if(chat){
         newmsg.classList.add('chat-message')
         if(msg.snippet) {//youtube chat
             newmsg.id = Date.parse(msg.snippet.publishedAt)
+            newmsg.classList.add(msg.snippet.type)
             newmsg.innerHTML =
-                '<a href="'+msg.authorDetails.channelUrl+'" target="_blank" class="chat-pfp">' +
-                '<img alt="" src="'+msg.authorDetails.profileImageUrl.replace('yt3.ggpht.com', 'yt4.ggpht.com')+'">' +
-                '</a>' +
-                '<div class="message-text">' +
-                '<span class="chat-time" onclick="videoSeek('+(Date.parse(msg.snippet.publishedAt)-starttime)/1000+')">'+convertTime(msg.snippet.publishedAt)+' </span>' +
-                '<span class="chat-name '+
-                (msg.authorDetails.isChatModerator?'moder ':'') +
-                (msg.authorDetails.isChatOwner?'owner ':'') +
-                (msg.authorDetails.isVerified?'verifed ':'') +
-                '">'+
-                escapeHtml(msg.authorDetails.displayName) + ((msg.authorDetails.isVerified)?('<img class="chaticon" alt="" src="icons/ytverifed'+
-                    ((msg.authorDetails.isChatModerator)?('moder'):((msg.authorDetails.isChatOwner)?('owner'):('')))+
-                    '.svg">'):(''))+
-                ((msg.authorDetails.isChatModerator)?('<img class="chaticon" alt="" src="icons/ytmoder.svg">'):('')) +': ' +
-                '</span>'+
-                '<span class="chattext">' +
-                convertYTemoji(escapeHtml(msg.snippet.displayMessage))
-                + '</span>' +
-                '</div>'
+                `<a href="${msg.authorDetails.channelUrl}" target="_blank" class="chat-pfp">
+                    <img alt="" src="${msg.authorDetails.profileImageUrl.replace('yt3.ggpht.com', 'yt4.ggpht.com')}">
+                </a>
+                <div class="message-text">
+                    <span class="chat-time" onclick="videoSeek(${(Date.parse(msg.snippet.publishedAt) - starttime) / 1000})">
+                        ${convertTime(msg.snippet.publishedAt)} 
+                    </span>
+                    <span class="chat-name ${msg.authorDetails.isChatModerator ? 'moder ' : ''}${msg.authorDetails.isChatOwner ? 'owner ' : ''}${msg.authorDetails.isVerified ? 'verifed ' : ''}">
+                        ${escapeHtml(msg.authorDetails.displayName)}${(msg.authorDetails.isVerified) ? ('<img class="chaticon" alt="" src="icons/ytverifed' + ((msg.authorDetails.isChatModerator) ? ('moder') : ((msg.authorDetails.isChatOwner) ? ('owner') : (''))) + '.svg">') : ('')}${(msg.authorDetails.isChatModerator) ? ('<img class="chaticon" alt="" src="icons/ytmoder.svg">') : ('')}: 
+                    </span>
+                    <span class="chattext">
+                        ${msg.snippet.superChatDetails?`${parseInt(msg.snippet.superChatDetails.amountDisplayString.replace(/[  ]/g, ''))} ${msg.snippet.superChatDetails.currency.trim()}.`:''}
+                        ${msg.snippet.superStickerDetails?`${parseInt(msg.snippet.superStickerDetails.amountDisplayString.replace(/[  ]/g, ''))} ${msg.snippet.superStickerDetails.currency.trim()}.<img alt="${msg.snippet.superStickerDetails.superStickerMetadata.altText}" src="${msg.snippet.superStickerDetails.superStickerMetadata.url}">` : 
+                        /*"else" for above line*/convertYTemoji(escapeHtml(msg.snippet?.superChatDetails?.userComment||msg.snippet.displayMessage))}
+                    </span>
+                </div>`//FIXME for now msg.snippet.superChatDetails.amountMicros is 10 times smaller if msg.converted === true, because I fucked up the conversion.
         } else {//twitch chat
             let msgbadgestext = ''
             let userbadges = Object.keys(msg.tags.badges || {})

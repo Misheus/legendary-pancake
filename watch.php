@@ -20,7 +20,7 @@ if(!isset($_COOKIE['client-uuid']) || preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-
 if(strcmp($_SERVER['SERVER_PORT'], '2053') != 0) {//I use port 2053 for testing. Disabling logging in this case.
     $entry = R::dispense('accesslog');
     $entry['uuid'] = $_COOKIE['client-uuid'];
-    $entry['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $entry['ip'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
     $entry['country'] = $_SERVER['HTTP_CF_IPCOUNTRY'];
     $entry['useragent'] = $_SERVER['HTTP_USER_AGENT'];
     $entry['path'] = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -119,7 +119,7 @@ else
     <meta property="og:image" content="https://sayastreams.mysheus.ru/covers/<?php echo $videoname ?>.jpg">
     <title><?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.ru</title>
     <link type="text/css" rel="stylesheet" href="/css/reset.css">
-    <link type="text/css" rel="stylesheet" href="/css/player2.css">
+    <link type="text/css" rel="stylesheet" href="/css/player2.css?1">
     <link type="text/css" rel="stylesheet" href="/css/btns-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
@@ -402,7 +402,7 @@ else
         </div>
         <?php }?>
     </main>
-    <script src="/js/player.js"></script>
+    <script src="/js/player.js?1"></script>
     <script src="/js/true-vh.js"></script>
 </body>
 </html>

@@ -624,3 +624,10 @@ body[data-nochat="true"] #playeritself[data-fullscreen="0"] video {
 .work-in-progress {
     display: none !important;
 }
+
+
+
+.superChatEvent,
+.superStickerEvent {
+    background: #1deab7;
+}

@@ -53,7 +53,7 @@
         if (/^[^\/?]*\.[^\/?]{3,4}$/.test(href) && window.location.pathname === '/') {
           //tell the browser not to respond to the link click
           e.preventDefault();
-          window.location.href = '/watch?v='+href
+          window.location.href = '/watch.php?v='+href
         }
       }
     }
