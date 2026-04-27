@@ -12,7 +12,7 @@ if(!isset($_COOKIE['client-uuid']) || preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-
     setcookie('client-uuid', $_COOKIE['client-uuid'], [
         "expires" => time()+1314000,//1 year
         "path" => "/",
-        "domain" => ".mysheus.ru",
+        "domain" => ".mysheus.md",
         "secure" => "true",
         "samesite" => "Strict"
     ]);
@@ -108,16 +108,16 @@ else
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
 <!--А если еблокнига теперь называется мета, значит ли это, что нам теперь нужно платить за использование <meta> тегов???-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Смотри удалённые записи стримов Сайи на sayastreams.mysheus.ru!">
-    <meta property="og:title" content="<?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.ru" />
+    <meta name="description" content="Смотри удалённые записи стримов Сайи на sayastreams.mysheus.md!">
+    <meta property="og:title" content="<?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.md" />
     <meta property="og:type" content="video.other" />
     <meta property="og:video" content="../2020-05-16.mp4" />
     <meta property="og:video:secure_url" content="../2020-05-16.mp4" />
     <meta property="og:video:type" content="video/mp4" />
     <meta property="og:video:width" content="1280" />
     <meta property="og:video:height" content="720" />
-    <meta property="og:image" content="https://sayastreams.mysheus.ru/covers/<?php echo $videoname ?>.jpg">
-    <title><?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.ru</title>
+    <meta property="og:image" content="https://sayastreams.mysheus.md/covers/<?php echo $videoname ?>.jpg">
+    <title><?php echo "$streamname, $starttimeformated"; ?> – sayastreams.mysheus.md</title>
     <link type="text/css" rel="stylesheet" href="/css/reset.css">
     <link type="text/css" rel="stylesheet" href="/css/player2.css?1">
     <link type="text/css" rel="stylesheet" href="/css/btns-icons.css">
@@ -321,8 +321,8 @@ else
                             </div>
                             <div class="desc-links">
                                 <a href="https://www.youtube.com/c/TheSayaScarlet" target="_blank"><?php echo resolveLoc('watchonyoutube'); ?></a> ●
-                                <a href="https://mysheus.ru/MeeThya/Saya_Streams_Tables.html" target="_blank"><?php echo resolveLoc('allrecords'); ?></a> ●
-                                <a href="https://mysheus.ru/MeeThya/Saya_Streams_Tables.html?mode=table" target="_blank"><?php echo resolveLoc('songstable'); ?></a>
+                                <a href="https://mysheus.md/MeeThya/Saya_Streams_Tables.html" target="_blank"><?php echo resolveLoc('allrecords'); ?></a> ●
+                                <a href="https://mysheus.md/MeeThya/Saya_Streams_Tables.html?mode=table" target="_blank"><?php echo resolveLoc('songstable'); ?></a>
                             </div>
                         </div>
                     </div>
